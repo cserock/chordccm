@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  QuestRunner
+
+  Created by Rock Kang on 13. 10. 11..
+
+*/
+
+CFBundleDisplayName = "ChordCCM";
+CFBundleName = "ChordCCM";

@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  QuestRunner
+
+  Created by Rock Kang on 13. 10. 11..
+
+*/
+
+CFBundleDisplayName = "코드씨씨엠";
+CFBundleName = "코드씨씨엠";

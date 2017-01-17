@@ -1,0 +1,37 @@
+/*
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+ */
+
+"ChordCCM" = "코드씨씨엠";
+"Check for Update" = "업데이트 알림";
+"Confirm" = "확인";
+"Later" = "다음에";
+"Please update ChordCCM to the latest version." = "최신 업데이트를 하면 더 편리하게\n코드씨씨엠을 사용할 수 있어요.\n지금 업데이트 해주세요.";
+"Error Internet connection" = "인터넷 연결 에러";
+"Please check your internet connection." = "인터넷 연결을 확인 후 다시 시도해 주세요.";
+"Check" = "확인";
+"Thank You" = "감사합니다";
+"Is ChordCCM being helpful?\nIf you did, leave a comment and rating in Appstore now!" = "코드씨씨엠이 도움이 되고 있나요?\n그렇다면, 지금 앱스토어에 리뷰와 평점을 남겨주세요!";
+"Rate ChordCCM" = "지금 남기기";
+"Remind Me Later" = "다음에 남기기";
+"Home" = "홈";
+"Play List" = "플레이 리스트";
+"Feedback" = "피드백";
+"Invite Friend" = "친구에게 알리기";
+"Kakao" = "카카오";
+"Facebook" = "페이스북";

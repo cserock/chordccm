@@ -1,0 +1,17 @@
+//
+//  AppDelegate.h
+//  codex
+//
+//  Created by Rock Kang on 2014. 5. 11..
+//  Copyright (c) 2014년 neosave.me. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
+
+@property (strong, nonatomic) UIWindow *window;
+-(void) initializeDatabase;
+-(NSString*)getChordPitchString:(NSString*) chordPitch;
+-(BOOL) isPad;
+@end
