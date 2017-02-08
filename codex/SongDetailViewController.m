@@ -18,8 +18,9 @@
 
 #define DATABASE_NAME @"codex.rdb"
 #define PLAY_LIST_LIMIT 15
+#define DEFAULT_SCALE 1.0
 
-#define NSLog //
+//#define NSLog //
 
 @interface SongDetailViewController ()
 
@@ -162,12 +163,56 @@
     
     [self autoPitch];
     
+    _isScaled = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(orientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    tapGesture.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:tapGesture];
 }
 
+- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateRecognized) {
+        NSLog(@"tap tap");
+    
+        CGFloat scrollViewHeight = 0.0f;
+        for (UIView* view in _noteView.subviews)
+        {
+            scrollViewHeight += view.frame.size.height;
+        }
+        
+        scrollViewHeight =  (_lineMarginY * _tableCount) + _startY + _cellHeight + _cellHeight + _cellHeight + _cellHeight + 12;
+        
+        float adjustScale = (_screenHeight/scrollViewHeight);
+        
+        if(adjustScale >= 1.0){
+            return;
+        }
+
+        if(adjustScale <= 0.4){
+            adjustScale = 0.4;
+        }
+        
+        NSLog(@"_screen Height : %f, _noteView Height : %f, content size : %f, adjustScale : %f", _screenHeight,  _noteView.frame.size.height, scrollViewHeight, adjustScale);
+        
+        float scale = DEFAULT_SCALE;
+        
+        if(_isScaled){
+            scale = DEFAULT_SCALE;
+            _isScaled = NO;
+        } else {
+            scale = adjustScale;
+            _isScaled = YES;
+        }
+        
+        _noteView.transform = CGAffineTransformMakeScale(scale, scale);
+        
+        [_noteScrollView setContentOffset:CGPointMake(0.0, (_lineMarginY*(1-scale)))];
+    }
+}
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
@@ -341,11 +386,16 @@
     // Create a view and add it to the window.
 //    self.noteView = [[UIScrollView alloc] initWithFrame: CGRectMake(0,40,_screenWidth,_screenHeight-40)];
     
-    self.noteView = [[UIScrollView alloc] initWithFrame: CGRectMake(0,0,_screenWidth,_screenHeight)];
+    self.noteScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(0,0,_screenWidth,_screenHeight)];
     
-    [self.noteView setContentSize:CGSizeMake(_screenWidth, _lineMarginY*(1+_tableCount))];
+    [self.noteScrollView setContentSize:CGSizeMake(_screenWidth, _lineMarginY*(1+_tableCount))];
+    [self.noteScrollView setBackgroundColor: [UIColor clearColor]];
+    [self.view addSubview: self.noteScrollView];
+    
+    self.noteView = [[UIView alloc] initWithFrame: CGRectMake(0,0,_screenWidth,_screenHeight)];
+   // [self.noteView setContentSize:CGSizeMake(_screenWidth, _lineMarginY*(1+_tableCount))];
     [self.noteView setBackgroundColor: [UIColor clearColor]];
-    [self.view addSubview: self.noteView];
+    [self.noteScrollView addSubview: self.noteView];
     
 }
 
