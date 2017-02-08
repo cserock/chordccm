@@ -36,8 +36,6 @@
 #import "GAI.h"
 #import "GAIDictionaryBuilder.h"
 #import <sys/sysctl.h>
-#import "UserVoice.h"
-#import "UVStyleSheet.h"
 #import <FBSDKShareKit/FBSDKSharing.h>
 #import <FBSDKShareKit/FBSDKShareDialog.h>
 #import <FBSDKShareKit/FBSDKShareLinkContent.h>
@@ -258,29 +256,6 @@
 
 - (void) feedback {
     
-    
-    UIDevice *device = [UIDevice currentDevice];
-    
-    NSString *deviceName = [self platformString];
-    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-    NSString *systemVersion = device.systemVersion;
-    
-    UVConfig *config = [UVConfig configWithSite:@"chordccm.uservoice.com"];
-    
-    config.customFields = @{@"appVersion" : appVersion, @"deviceName" : deviceName, @"systemVersion" : systemVersion};
-    
-    [UserVoice initialize:config];
-    
-    [UVStyleSheet instance].tintColor = [UIColor colorWithRed:(240/255.f) green:(115/255.f) blue:(106/255.f) alpha:1.0f];
-    [UVStyleSheet instance].tableViewBackgroundColor = [UIColor colorWithRed:(240/255.f) green:(240/255.f) blue:(241/255.f) alpha:1.0f];
-    [UVStyleSheet instance].navigationBarBackgroundColor = [UIColor colorWithRed:(240/255.f) green:(115/255.f) blue:(106/255.f) alpha:1.0f];
-    [UVStyleSheet instance].navigationBarFont = [UIFont fontWithName:@"AppleSDGothicNeo-Medium" size:16];
-    [UVStyleSheet instance].navigationBarActivityIndicatorColor  = [UIColor colorWithRed:(240/255.f) green:(115/255.f) blue:(106/255.f) alpha:1.0f];
-    
-    [UserVoice presentUserVoiceContactUsFormForParentViewController:self];
-//    [UserVoice presentUserVoiceInterfaceForParentViewController:self];
-    
-    /*
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] initWithNibName:nil bundle:nil];
         [composeViewController setMailComposeDelegate:self];
@@ -300,7 +275,7 @@
         
         [self presentViewController:composeViewController animated:YES completion:nil];
     }
-     */
+    
 }
 
 - (void) inviteKakao {
@@ -511,5 +486,36 @@
         return ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad);
 #endif
     return NO;
+}
+
+- (void) goReview {
+    UIAlertController * alert =   [UIAlertController
+                                   alertControllerWithTitle:NSLocalizedString(@"Reviews",nil)
+                                   message:NSLocalizedString(@"Please review this app in the Appstore.",nil)
+                                   preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* later = [UIAlertAction
+                            actionWithTitle:NSLocalizedString(@"Later",nil)
+                            style:UIAlertActionStyleDefault
+                            handler:^(UIAlertAction * action)
+                            {
+                                [alert dismissViewControllerAnimated:YES completion:nil];
+                            }];
+    
+    UIAlertAction* confirm = [UIAlertAction
+                              actionWithTitle:NSLocalizedString(@"Review",nil)
+                              style:UIAlertActionStyleDefault
+                              handler:^(UIAlertAction * action)
+                              {
+                                  [alert dismissViewControllerAnimated:YES completion:nil];
+                                  NSURL *url = [NSURL URLWithString:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=901633885&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"];
+                                  [[UIApplication sharedApplication] openURL:url];
+                                  
+                              }];
+    
+    [alert addAction:later];
+    [alert addAction:confirm];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 @end

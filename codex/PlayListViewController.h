@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editBarButton;
 @property (nonatomic, strong) AppDelegate *appDelegate;
 @property (nonatomic,retain) UIActivityIndicatorView *activityIndicatorObject;
+@property (strong, nonatomic) IBOutlet UITableView *playListTableView;
 
 - (IBAction)showMenu;
 - (IBAction)editPlayList;

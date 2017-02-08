@@ -64,7 +64,7 @@
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, 0, 24)];
         label.text = [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"];
-        label.font = [UIFont fontWithName:@"AppleSDGothicNeo-Medium" size:20];
+        label.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
         label.backgroundColor = [UIColor clearColor];
         label.textColor = [UIColor colorWithRed:62/255.0f green:68/255.0f blue:75/255.0f alpha:1.0f];
         [label sizeToFit];
@@ -93,28 +93,37 @@
 {
     cell.backgroundColor = [UIColor clearColor];
     cell.textLabel.textColor = [UIColor colorWithRed:62/255.0f green:68/255.0f blue:75/255.0f alpha:1.0f];
-    cell.textLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Medium" size:17];
+    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:15];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)sectionIndex
 {
-    if (sectionIndex == 0)
+    if (sectionIndex == 0){
         return nil;
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 34)];
-    view.backgroundColor = [UIColor colorWithRed:167/255.0f green:167/255.0f blue:167/255.0f alpha:0.6f];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 8, 0, 0)];
-    label.text = NSLocalizedString(@"Invite Friend", nil);
-//    label.font = [UIFont systemFontOfSize:15];
-    [label setFont:[UIFont fontWithName: @"AppleSDGothicNeo-Medium" size: 15]];
-    
-    label.textColor = [UIColor whiteColor];
-    label.backgroundColor = [UIColor clearColor];
-    [label sizeToFit];
-    [view addSubview:label];
-    
-    return view;
+    } else {
+        
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 34)];
+        view.backgroundColor = [UIColor colorWithRed:167/255.0f green:167/255.0f blue:167/255.0f alpha:0.6f];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 8, 0, 0)];
+        
+        if (sectionIndex == 1){
+            label.text = NSLocalizedString(@"Settings", nil);
+
+        } else if (sectionIndex == 2){
+            label.text = NSLocalizedString(@"Invite Friend", nil);
+
+    //    label.font = [UIFont systemFontOfSize:15];
+        }
+        [label setFont:[UIFont fontWithName: @"HelveticaNeue-Medium" size: 13]];
+        
+        label.textColor = [UIColor whiteColor];
+        label.backgroundColor = [UIColor clearColor];
+        [label sizeToFit];
+        [view addSubview:label];
+        
+        return view;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)sectionIndex
@@ -122,7 +131,7 @@
     if (sectionIndex == 0)
         return 0;
     
-    return 34;
+    return 30;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -154,7 +163,7 @@
         
         PlayListViewController *playListViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"playListController"];
         navigationController.viewControllers = @[playListViewController];
-    } else if (indexPath.section == 0 && indexPath.row == 2) {
+    } else if (indexPath.section == 1 && indexPath.row == 0) {
         
         gBuilder = [GAIDictionaryBuilder createEventWithCategory:@"ui_action"     // Event category (required)
                                                           action:@"menu_press"  // Event action (required)
@@ -165,7 +174,18 @@
         
 //        SettingViewController *settingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"settingController"];
 //        navigationController.viewControllers = @[settingViewController];
-    } else if (indexPath.section == 1 && indexPath.row == 0) {
+    } else if (indexPath.section == 1 && indexPath.row == 1) {
+        
+        gBuilder = [GAIDictionaryBuilder createEventWithCategory:@"ui_action"     // Event category (required)
+                                                          action:@"menu_press"  // Event action (required)
+                                                           label:@"Reviews"          // Event label
+                                                           value:nil];
+        
+        [self.frostedViewController goReview];
+        
+        //        SettingViewController *settingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"settingController"];
+        //        navigationController.viewControllers = @[settingViewController];
+    } else if (indexPath.section == 2 && indexPath.row == 0) {
         
         gBuilder = [GAIDictionaryBuilder createEventWithCategory:@"ui_action"     // Event category (required)
                                                           action:@"menu_press"  // Event action (required)
@@ -174,7 +194,7 @@
         
         [self.frostedViewController inviteKakao];
         
-    } else if (indexPath.section == 1 && indexPath.row == 1) {
+    } else if (indexPath.section == 2 && indexPath.row == 1) {
         
         gBuilder = [GAIDictionaryBuilder createEventWithCategory:@"ui_action"     // Event category (required)
                                                           action:@"menu_press"  // Event action (required)
@@ -197,20 +217,23 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 54;
+    return 42;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)sectionIndex
 {
-    if (sectionIndex == 0)
-        return 3;
-        
-    return 2;
+    if (sectionIndex == 0){
+        return 2;
+    } else if (sectionIndex == 1){
+        return 2;
+    } else {
+        return 2;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -224,9 +247,12 @@
     }
     
     if (indexPath.section == 0) {
-        NSArray *titles = @[NSLocalizedString(@"Home", nil), NSLocalizedString(@"Play List", nil), NSLocalizedString(@"Feedback", nil)];
+        NSArray *titles = @[NSLocalizedString(@"Home", nil), NSLocalizedString(@"Play List", nil), ];
         cell.textLabel.text = titles[indexPath.row];
-    } else {
+    } else if (indexPath.section == 1) {
+        NSArray *titles = @[NSLocalizedString(@"Feedback", nil), NSLocalizedString(@"Reviews", nil)];
+        cell.textLabel.text = titles[indexPath.row];
+    } else if (indexPath.section == 2) {
         NSArray *titles = @[NSLocalizedString(@"Kakao", nil), NSLocalizedString(@"Facebook", nil)];
         cell.textLabel.text = titles[indexPath.row];
     }
