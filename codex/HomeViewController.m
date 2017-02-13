@@ -66,7 +66,7 @@ NSArray *searchResults;
     
     [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"];
     
-    NSString *homeTitle = [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"ChordCCM", nil), NSLocalizedString(@"Home", nil)];
+    NSString *homeTitle = [NSString stringWithFormat:@"%@", NSLocalizedString(@"ChordCCM", nil)];
     self.navigationItem.title = homeTitle;
     
     _appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];

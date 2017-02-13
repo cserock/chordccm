@@ -9,7 +9,7 @@
 #import "PlayListViewController.h"
 #import "SongInfo.h"
 #import "SongInfoCell.h"
-#import "PlayDetailViewController.h"
+#import "SongDetailViewController.h"
 
 #define NSLog //
 
@@ -58,22 +58,8 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    // s : ios6 navigator bar color
-    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
-        // here you go with iOS 6
-        self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:240.0/255.0 green:115.0/255.0 blue:106.0/255.0 alpha:1.0];
-    }
-    // e : ios6 navigator bar color
-    
-    NSString *homeTitle = [NSString stringWithFormat:@"%@", NSLocalizedString(@"Play List", nil)];
-    self.navigationItem.title = homeTitle;
-    
-    _appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
+- (void)viewWillAppear:(BOOL)animated {
+ 
     _songs = [[NSMutableArray alloc] init];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -108,9 +94,29 @@
                 [_songs addObject:songInfo];
                 
                 NSLog(@"PlayListViewController %d, %@, %@, %@", songInfo.song_info_id, songInfo.song_title, songInfo.chord, songInfo.beat);
-            }   
+            }
         }
+        
+        [_playListTableView reloadData];
     }
+}
+
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    // s : ios6 navigator bar color
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        // here you go with iOS 6
+        self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:240.0/255.0 green:115.0/255.0 blue:106.0/255.0 alpha:1.0];
+    }
+    // e : ios6 navigator bar color
+    
+    NSString *homeTitle = [NSString stringWithFormat:@"%@", NSLocalizedString(@"Play List", nil)];
+    self.navigationItem.title = homeTitle;
+    
+    _appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     _activityIndicatorObject = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     
@@ -217,7 +223,8 @@
        
         // Additional code to configure the Edit Button, if any
         if (_songs.count == 0) {
-            [self.navigationItem.rightBarButtonItem setTitle:@"Edit"];
+//            [self.navigationItem.rightBarButtonItem setTitle:@"Edit"];
+            [self.navigationItem.rightBarButtonItem setImage:[UIImage imageNamed:@"icon-edit.png"]];
             self.navigationItem.rightBarButtonItem.enabled = NO;
         }
         
@@ -299,7 +306,7 @@
 
 #pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"showPlayDetail"]) {
+    if ([segue.identifier isEqualToString:@"showSongDetail"]) {
         
         NSIndexPath *indexPath = nil;
         SongInfo *songInfo = nil;
@@ -307,7 +314,10 @@
         indexPath = [self.tableView indexPathForSelectedRow];
         songInfo = [_songs objectAtIndex:indexPath.row];
         
-        PlayDetailViewController *destViewController = segue.destinationViewController;
+        SongDetailViewController *destViewController = segue.destinationViewController;
+        
+        destViewController.isPlaylist = YES;
+        destViewController.songInfo = songInfo;
         destViewController.bookmarkIndex = indexPath.row;
     }
 }
@@ -318,7 +328,7 @@
 
 
 - (void) threadStartAnimating:(id)data {
-    [_activityIndicatorObject startAnimating];
+//    [_activityIndicatorObject startAnimating];
 }
 
 @end

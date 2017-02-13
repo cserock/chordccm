@@ -54,7 +54,12 @@
 @property (nonatomic, assign)  float chordPadding;
 
 @property (nonatomic, assign) BOOL isScaled;
-
+@property (nonatomic, assign) NSInteger bookmarkIndex;
+@property (nonatomic, assign) BOOL isPlaylist;
+@property (nonatomic, strong) NSMutableArray *playListSongs;
+@property (nonatomic, assign) int playListSongsCount;
+@property (nonatomic, assign) int playListSongIndex;
+@property (nonatomic, assign) BOOL isUpdating;
 
 - (void) makeNote;
 - (void) makeLine:(int)lineNum;
