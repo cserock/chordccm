@@ -19,7 +19,8 @@
 @property (nonatomic, strong) AppDelegate *appDelegate;
 
 @property (nonatomic, strong) SongInfo *songInfo;
-@property (nonatomic, strong) UIScrollView *noteView;
+@property (nonatomic, strong) UIScrollView *noteScrollView;
+@property (nonatomic, strong) UIView *noteView;
 @property (nonatomic, strong) AwesomeMenu *menu;
 @property (nonatomic, assign) BOOL isShowingLandscapeView;
 @property (nonatomic, assign) int pitchCount;
@@ -52,6 +53,13 @@
 @property (nonatomic, assign)  float lyricHeight;
 @property (nonatomic, assign)  float chordPadding;
 
+@property (nonatomic, assign) BOOL isScaled;
+@property (nonatomic, assign) NSInteger bookmarkIndex;
+@property (nonatomic, assign) BOOL isPlaylist;
+@property (nonatomic, strong) NSMutableArray *playListSongs;
+@property (nonatomic, assign) int playListSongsCount;
+@property (nonatomic, assign) int playListSongIndex;
+@property (nonatomic, assign) BOOL isUpdating;
 
 - (void) makeNote;
 - (void) makeLine:(int)lineNum;

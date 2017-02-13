@@ -18,6 +18,7 @@
 
 #define DATABASE_NAME @"codex.rdb"
 #define PLAY_LIST_LIMIT 15
+#define DEFAULT_SCALE 1.0
 
 #define NSLog //
 
@@ -44,6 +45,14 @@
 {
     [super viewDidLoad];
     
+    NSLog(@"viewDidLoad - isPlayList : %d", _isPlaylist);
+    NSLog(@"viewDidLoad - bookmarkIndex : %ld", _bookmarkIndex);
+    
+    if(_isPlaylist){
+        [self setPlayList];
+    }
+    
+    
     // s : ios6 navigator bar color
     if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
         // here you go with iOS 6
@@ -59,6 +68,57 @@
     
     _appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
+    [self initValue];
+    
+    self.noteScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(0,0,_screenWidth,_screenHeight)];
+    [self.noteScrollView setBackgroundColor: [UIColor clearColor]];
+    [self.view addSubview: self.noteScrollView];
+    
+    
+    // s: make view
+    [self makeView];
+    // e: make view
+    
+    // s: init note
+    [self initNote];
+    // e: init note
+    
+    // s: make note
+    [self makeNote];
+    // e: make note
+    
+    // s: make menu
+    [self makeMenu];
+    // e: make menu
+    
+    [self autoPitch];
+    
+    _isScaled = NO;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(orientationChanged:)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    tapGesture.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:tapGesture];
+    
+    UISwipeGestureRecognizer *swipeleft=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeleft:)];
+    swipeleft.direction=UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:swipeleft];
+    
+    UISwipeGestureRecognizer * swiperight=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swiperight:)];
+    swiperight.direction=UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:swiperight];
+    
+    if(_isPlaylist){
+        [self.view makeToast:@"좌,우로 스와이핑 하면 곡 이동을 할 수 있습니다."];
+    } else {
+        [self.view makeToast:@"화면을 두 번 탭 하면 확대/축소 할 수 있습니다."];
+    }
+}
+
+-(void)initValue {
     
     _startY = 0.0f;
     _lineX = 10.0f;
@@ -88,7 +148,7 @@
         _isShowingLandscapeView = NO;
     }
     
-//    NSLog(@"viewDidLoad : isShowingLandscapeView : %d", _isShowingLandscapeView);
+    //    NSLog(@"viewDidLoad : isShowingLandscapeView : %d", _isShowingLandscapeView);
     
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     _screenWidth = screenRect.size.width;
@@ -144,6 +204,72 @@
     // init pitch count
     _pitchCount = 0;
     
+}
+
+-(void)setPlayList {
+    
+    _playListSongs = [[NSMutableArray alloc] init];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *bookmarkList = [defaults objectForKey:@"bookmarkList"];
+    
+    if(bookmarkList){
+        
+        for( NSDictionary *dict in bookmarkList ) {
+            
+            // insert into an object
+            SongInfo *songInfo = [[SongInfo alloc] init];
+            
+            if (songInfo) {
+                
+                songInfo.song_info_id = [(NSNumber *) [dict objectForKey:@"songInfo.song_info_id"] intValue];
+                songInfo.song_number = [(NSNumber *) [dict objectForKey:@"songInfo.song_number"] intValue];
+                songInfo.song_title = [dict objectForKey:@"songInfo.song_title"];
+                songInfo.category_1 = [(NSNumber *) [dict objectForKey:@"songInfo.category_1"] intValue];
+                songInfo.category_2 = [(NSNumber *)[dict objectForKey:@"songInfo.category_2"] intValue];
+                songInfo.song_lyric_start = [dict objectForKey:@"songInfo.song_lyric_start"];
+                songInfo.song_lyric_refrain = [dict objectForKey:@"songInfo.song_lyric_refrain"];
+                songInfo.song_lyric_keyword = [dict objectForKey:@"songInfo.song_lyric_keyword"];
+                songInfo.beat = [dict objectForKey:@"songInfo.beat"];
+                songInfo.chord = [dict objectForKey:@"songInfo.chord"];
+                songInfo.chord_pitch = [dict objectForKey:@"songInfo.chord_pitch"];
+                songInfo.chord_option = [dict objectForKey:@"songInfo.chord_option"];
+                songInfo.bar_count = [(NSNumber *) [dict objectForKey:@"songInfo.bar_count"] intValue];
+                songInfo.lyric_count = [(NSNumber *) [dict objectForKey:@"songInfo.lyric_count"] intValue];
+                songInfo.pitch_count = [(NSNumber *) [dict objectForKey:@"songInfo.pitch_count"] intValue];
+                
+                
+                [_playListSongs addObject:songInfo];
+                
+                //                NSLog(@"PlayDetailViewController %d, %@, %@, %@", songInfo.song_info_id, songInfo.song_title, songInfo.chord, songInfo.beat);
+            }
+        }
+    }
+    
+    
+    NSLog(@"viewDidLoad : bookmarkIndex : %ld", _bookmarkIndex);
+    
+//    SongInfo *songInfoForTitle = [_playListSongs objectAtIndex:_bookmarkIndex];
+//    self.navigationItem.title = songInfoForTitle.song_title;
+    
+    _playListSongsCount = (int)[_playListSongs count];
+    
+    NSLog(@"_playListSongsCount : %d", _playListSongsCount);
+}
+
+-(void)updateSong {
+    
+    /*
+    for(UIView *subview in [_noteScrollView subviews])
+    {
+        [_noteView removeFromSuperview];
+    }
+    */
+    
+    [_noteView removeFromSuperview];
+    
+    [self initValue];
+    
     // s: make view
     [self makeView];
     // e: make view
@@ -162,12 +288,105 @@
     
     [self autoPitch];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(orientationChanged:)
-                                                 name:UIDeviceOrientationDidChangeNotification
-                                               object:nil];
+    if(_isScaled){
+        [self setScale:YES];
+    }
+    
+    self.navigationItem.title = self.songInfo.song_title;
+    NSLog(@"updateSong : bookmarkIndex : %ld", _bookmarkIndex);
 }
 
+
+-(void)swipeleft:(UISwipeGestureRecognizer*)gestureRecognizer
+{
+    //Do what you want here
+    NSLog(@"swipeleft");
+    
+    if(_bookmarkIndex >= (_playListSongsCount - 1)){
+        [self.view makeToast:@"플레이 리스트 마지막 곡 입니다."];
+        return;
+    }
+    
+    _bookmarkIndex++;
+    
+    self.songInfo = [_playListSongs objectAtIndex:_bookmarkIndex];
+    
+    [self updateSong];
+}
+
+-(void)swiperight:(UISwipeGestureRecognizer*)gestureRecognizer
+{
+    //Do what you want here
+    NSLog(@"swiperight");
+    
+    if(_bookmarkIndex <= 0){
+        [self.view makeToast:@"플레이 리스트 첫 곡 입니다."];
+        return;
+    }
+    
+    _bookmarkIndex--;
+    
+    self.songInfo = [_playListSongs objectAtIndex:_bookmarkIndex];
+    
+    [self updateSong];
+}
+
+- (void) setScale:(BOOL) isZoomOut {
+    
+    
+    float scale = DEFAULT_SCALE;
+    float scrollY = _lineMarginY*(1+_tableCount);
+    
+    if(isZoomOut){
+    
+        CGFloat scrollViewHeight = 0.0f;
+        for (UIView* view in _noteView.subviews)
+        {
+            scrollViewHeight += view.frame.size.height;
+        }
+    
+        scrollViewHeight =  (_lineMarginY * _tableCount) + _startY + _cellHeight + _cellHeight + _cellHeight + _cellHeight + 12;
+    
+        float adjustScale = (_screenHeight/scrollViewHeight);
+    
+        if(adjustScale >= 1.0){
+            return;
+        }
+    
+        if(adjustScale <= 0.4){
+            adjustScale = 0.4;
+        }
+    
+        NSLog(@"_screen Height : %f, _noteView Height : %f, content size : %f, adjustScale : %f", _screenHeight,  _noteView.frame.size.height, scrollViewHeight, adjustScale);
+    
+        scale = adjustScale;
+        scrollY = scrollViewHeight * adjustScale;
+    }
+
+    _noteView.transform = CGAffineTransformMakeScale(scale, scale);
+    
+    [self.noteScrollView setContentSize:CGSizeMake(_screenWidth, scrollY)];
+    
+    _noteView.frame = CGRectMake(_noteView.frame.origin.x, 0, _noteView.frame.size.width, _noteView.frame.size.height);
+    
+    
+//    [_noteScrollView setContentOffset:CGPointMake(0.0, (_lineMarginY*(1-scale)))];
+//    [_noteScrollView setContentOffset:CGPointMake(0.0, scrollY)];
+}
+
+- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateRecognized) {
+        NSLog(@"tap tap");
+        
+        if(!_isScaled){
+            [self setScale:YES];
+            _isScaled = YES;
+        } else {
+            [self setScale:NO];
+            _isScaled = NO;
+        }
+    }
+}
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
@@ -339,13 +558,20 @@
     _beatMaxCount = _songBarCount * _beatCountInBar;
     
     // Create a view and add it to the window.
-//    self.noteView = [[UIScrollView alloc] initWithFrame: CGRectMake(0,40,_screenWidth,_screenHeight-40)];
+//    self.noteScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(0,40,_screenWidth,_screenHeight-40)];
     
-    self.noteView = [[UIScrollView alloc] initWithFrame: CGRectMake(0,0,_screenWidth,_screenHeight)];
+    // origin
+//    self.noteScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(0,0,_screenWidth,_screenHeight)];
+//    [self.noteScrollView setContentSize:CGSizeMake(_screenWidth, _lineMarginY*(1+_tableCount))];
+//    [self.noteScrollView setBackgroundColor: [UIColor clearColor]];
+//    [self.view addSubview: self.noteScrollView];
     
-    [self.noteView setContentSize:CGSizeMake(_screenWidth, _lineMarginY*(1+_tableCount))];
+    [self.noteScrollView setContentSize:CGSizeMake(_screenWidth, _lineMarginY*(1+_tableCount))];
+    
+    self.noteView = [[UIView alloc] initWithFrame: CGRectMake(0,0,_screenWidth,_screenHeight)];
+   // [self.noteView setContentSize:CGSizeMake(_screenWidth, _lineMarginY*(1+_tableCount))];
     [self.noteView setBackgroundColor: [UIColor clearColor]];
-    [self.view addSubview: self.noteView];
+    [self.noteScrollView addSubview: self.noteView];
     
 }
 

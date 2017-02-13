@@ -76,6 +76,7 @@ typedef NS_ENUM(NSInteger, REFrostedViewControllerLiveBackgroundStyle) {
 - (void)feedback;
 - (void)inviteKakao;
 - (void)inviteFB;
+- (void)goReview;
 
 @end
 

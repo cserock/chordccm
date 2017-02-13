@@ -29,7 +29,9 @@
     //but we want to test with an app that's actually on the store
     [iRate sharedInstance].applicationBundleID = @"me.neosave.chordccm";
 	[iRate sharedInstance].onlyPromptIfLatestVersion = NO;
-    [iRate sharedInstance].daysUntilPrompt = 5.0;
+    [iRate sharedInstance].daysUntilPrompt = 3;
+    [iRate sharedInstance].usesUntilPrompt = 10;
+    
     
     //enable preview mode
 //    [iRate sharedInstance].previewMode = YES;

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BE2821B11962CD0000640F58 /* PlayDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2821B01962CD0000640F58 /* PlayDetailViewController.m */; };
 		BE2955921920AD630041E943 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2955911920AD630041E943 /* HomeViewController.m */; };
 		BE2955961920B1840041E943 /* SongInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2955951920B1840041E943 /* SongInfo.m */; };
 		BE29559A1920B2C20041E943 /* SongData.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2955991920B2C20041E943 /* SongData.m */; };
@@ -98,14 +97,6 @@
 		BEA4626319825E9200812B22 /* Icon-Small-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEA4625819825E9200812B22 /* Icon-Small-40@2x.png */; };
 		BEA4626419825E9200812B22 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = BEA4625919825E9200812B22 /* Icon-Small.png */; };
 		BEA4626519825E9200812B22 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEA4625A19825E9200812B22 /* Icon-Small@2x.png */; };
-		BEAC47CB198106BB00342E48 /* UserVoice.strings in Resources */ = {isa = PBXBuildFile; fileRef = BEAC47A3198106BA00342E48 /* UserVoice.strings */; };
-		BEAC47CC198106BB00342E48 /* uv_article.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAC47C1198106BB00342E48 /* uv_article.png */; };
-		BEAC47CD198106BB00342E48 /* uv_article@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAC47C2198106BB00342E48 /* uv_article@2x.png */; };
-		BEAC47CE198106BB00342E48 /* uv_heart.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAC47C3198106BB00342E48 /* uv_heart.png */; };
-		BEAC47CF198106BB00342E48 /* uv_heart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAC47C4198106BB00342E48 /* uv_heart@2x.png */; };
-		BEAC47D0198106BB00342E48 /* uv_idea.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAC47C5198106BB00342E48 /* uv_idea.png */; };
-		BEAC47D1198106BB00342E48 /* uv_idea@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAC47C6198106BB00342E48 /* uv_idea@2x.png */; };
-		BEAC47D8198117E700342E48 /* libUserVoice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BEAC47D7198117E700342E48 /* libUserVoice.a */; };
 		BEC0866E191F34C500B8DC2A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEC0866D191F34C500B8DC2A /* Foundation.framework */; };
 		BEC08670191F34C500B8DC2A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEC0866F191F34C500B8DC2A /* CoreGraphics.framework */; };
 		BEC08672191F34C500B8DC2A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEC08671191F34C500B8DC2A /* UIKit.framework */; };
@@ -164,8 +155,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		BE2821AF1962CD0000640F58 /* PlayDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayDetailViewController.h; sourceTree = "<group>"; };
-		BE2821B01962CD0000640F58 /* PlayDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayDetailViewController.m; sourceTree = "<group>"; };
 		BE2955901920AD630041E943 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		BE2955911920AD630041E943 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		BE2955941920B1840041E943 /* SongInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongInfo.h; sourceTree = "<group>"; };
@@ -278,49 +267,6 @@
 		BEA4625819825E9200812B22 /* Icon-Small-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-40@2x.png"; sourceTree = "<group>"; };
 		BEA4625919825E9200812B22 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
 		BEA4625A19825E9200812B22 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
-		BEAC479E198106BA00342E48 /* UserVoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVoice.h; sourceTree = "<group>"; };
-		BEAC479F198106BA00342E48 /* UVConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UVConfig.h; sourceTree = "<group>"; };
-		BEAC47A0198106BA00342E48 /* UVDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UVDelegate.h; sourceTree = "<group>"; };
-		BEAC47A1198106BA00342E48 /* UVStyleSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UVStyleSheet.h; sourceTree = "<group>"; };
-		BEAC47A4198106BA00342E48 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47A5198106BA00342E48 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47A6198106BA00342E48 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47A7198106BA00342E48 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47A8198106BA00342E48 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47A9198106BA00342E48 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/UserVoice.strings"; sourceTree = "<group>"; };
-		BEAC47AA198106BA00342E48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47AB198106BA00342E48 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47AC198106BA00342E48 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47AD198106BA00342E48 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47AE198106BA00342E48 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47AF198106BB00342E48 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47B0198106BB00342E48 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47B1198106BB00342E48 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47B2198106BB00342E48 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47B3198106BB00342E48 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47B4198106BB00342E48 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47B5198106BB00342E48 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47B6198106BB00342E48 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47B7198106BB00342E48 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47B8198106BB00342E48 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/UserVoice.strings"; sourceTree = "<group>"; };
-		BEAC47B9198106BB00342E48 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47BA198106BB00342E48 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47BB198106BB00342E48 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47BC198106BB00342E48 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47BD198106BB00342E48 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47BE198106BB00342E48 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47BF198106BB00342E48 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47C0198106BB00342E48 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47C1198106BB00342E48 /* uv_article.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uv_article.png; sourceTree = "<group>"; };
-		BEAC47C2198106BB00342E48 /* uv_article@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uv_article@2x.png"; sourceTree = "<group>"; };
-		BEAC47C3198106BB00342E48 /* uv_heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uv_heart.png; sourceTree = "<group>"; };
-		BEAC47C4198106BB00342E48 /* uv_heart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uv_heart@2x.png"; sourceTree = "<group>"; };
-		BEAC47C5198106BB00342E48 /* uv_idea.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uv_idea.png; sourceTree = "<group>"; };
-		BEAC47C6198106BB00342E48 /* uv_idea@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uv_idea@2x.png"; sourceTree = "<group>"; };
-		BEAC47C7198106BB00342E48 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/UserVoice.strings; sourceTree = "<group>"; };
-		BEAC47C8198106BB00342E48 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/UserVoice.strings"; sourceTree = "<group>"; };
-		BEAC47C9198106BB00342E48 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/UserVoice.strings"; sourceTree = "<group>"; };
-		BEAC47D7198117E700342E48 /* libUserVoice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUserVoice.a; sourceTree = "<group>"; };
 		BEC0866A191F34C500B8DC2A /* codex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = codex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEC0866D191F34C500B8DC2A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BEC0866F191F34C500B8DC2A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -400,7 +346,6 @@
 				BE692464197A640500A19C73 /* CoreData.framework in Frameworks */,
 				CF0757A51E1DE3AA008F80A3 /* Bolts.framework in Frameworks */,
 				CF0757A71E1DE3AA008F80A3 /* FBSDKLoginKit.framework in Frameworks */,
-				BEAC47D8198117E700342E48 /* libUserVoice.a in Frameworks */,
 				BE692460197A62CC00A19C73 /* SystemConfiguration.framework in Frameworks */,
 				BE69245E197A62B400A19C73 /* AdSupport.framework in Frameworks */,
 				BEC08670191F34C500B8DC2A /* CoreGraphics.framework in Frameworks */,
@@ -438,8 +383,6 @@
 				BE2955911920AD630041E943 /* HomeViewController.m */,
 				BE7B05EC1921FF9300289739 /* SongDetailViewController.h */,
 				BE7B05ED1921FF9300289739 /* SongDetailViewController.m */,
-				BE2821AF1962CD0000640F58 /* PlayDetailViewController.h */,
-				BE2821B01962CD0000640F58 /* PlayDetailViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -619,45 +562,9 @@
 			path = icons;
 			sourceTree = "<group>";
 		};
-		BEAC479B198106BA00342E48 /* Uservoice */ = {
-			isa = PBXGroup;
-			children = (
-				BEAC47D7198117E700342E48 /* libUserVoice.a */,
-				BEAC479D198106BA00342E48 /* UVHeaders */,
-				BEAC47A2198106BA00342E48 /* UVResources */,
-			);
-			path = Uservoice;
-			sourceTree = "<group>";
-		};
-		BEAC479D198106BA00342E48 /* UVHeaders */ = {
-			isa = PBXGroup;
-			children = (
-				BEAC479E198106BA00342E48 /* UserVoice.h */,
-				BEAC479F198106BA00342E48 /* UVConfig.h */,
-				BEAC47A0198106BA00342E48 /* UVDelegate.h */,
-				BEAC47A1198106BA00342E48 /* UVStyleSheet.h */,
-			);
-			path = UVHeaders;
-			sourceTree = "<group>";
-		};
-		BEAC47A2198106BA00342E48 /* UVResources */ = {
-			isa = PBXGroup;
-			children = (
-				BEAC47A3198106BA00342E48 /* UserVoice.strings */,
-				BEAC47C1198106BB00342E48 /* uv_article.png */,
-				BEAC47C2198106BB00342E48 /* uv_article@2x.png */,
-				BEAC47C3198106BB00342E48 /* uv_heart.png */,
-				BEAC47C4198106BB00342E48 /* uv_heart@2x.png */,
-				BEAC47C5198106BB00342E48 /* uv_idea.png */,
-				BEAC47C6198106BB00342E48 /* uv_idea@2x.png */,
-			);
-			path = UVResources;
-			sourceTree = "<group>";
-		};
 		BEC08661191F34C500B8DC2A = {
 			isa = PBXGroup;
 			children = (
-				BEAC479B198106BA00342E48 /* Uservoice */,
 				BE692450197A624200A19C73 /* GA */,
 				BE692447197A43E100A19C73 /* iRate */,
 				BE503316194F3505004E96DB /* TTTAttributedLabel */,
@@ -947,7 +854,6 @@
 				BEE0D18219584A0000BF9619 /* icon-edit-ok@2x.png in Resources */,
 				BE83956E1931D9240094E544 /* icon-bookmark.png in Resources */,
 				BE4630251953191F000456DA /* icon-detail-song.png in Resources */,
-				BEAC47D1198106BB00342E48 /* uv_idea@2x.png in Resources */,
 				BE83958F1931D9240094E544 /* rest_whole@2x.png in Resources */,
 				BE83956B1931D9240094E544 /* bg-menuitem-highlighted@2x.png in Resources */,
 				BE83955D1931D9240094E544 /* bar_begin_repeat@2x.png in Resources */,
@@ -963,15 +869,12 @@
 				BE83957E1931D9240094E544 /* icon-youtube.png in Resources */,
 				BE8395841931D9240094E544 /* rest_half.png in Resources */,
 				BECD95521954A2C20046A172 /* Default~iphone.png in Resources */,
-				BEAC47CD198106BB00342E48 /* uv_article@2x.png in Resources */,
 				BE58EEAE19345AFC00DEEA9F /* Localizable.strings in Resources */,
 				BE83958A1931D9240094E544 /* rest_quarter_point.png in Resources */,
 				BE83958B1931D9240094E544 /* rest_quarter_point@2x.png in Resources */,
 				BE69244B197A43E100A19C73 /* iRate.bundle in Resources */,
 				BE8395751931D9240094E544 /* icon-plus@2x.png in Resources */,
-				BEAC47CF198106BB00342E48 /* uv_heart@2x.png in Resources */,
 				BEC08681191F34C500B8DC2A /* Main_iPhone.storyboard in Resources */,
-				BEAC47CB198106BB00342E48 /* UserVoice.strings in Resources */,
 				BE8395881931D9240094E544 /* rest_quarter.png in Resources */,
 				BE83955F1931D9240094E544 /* bar_double@2x.png in Resources */,
 				BE83957C1931D9240094E544 /* icon-up.png in Resources */,
@@ -982,10 +885,8 @@
 				BE46302119530ED6000456DA /* icon-back@2x.png in Resources */,
 				BE8395781931D9240094E544 /* icon-rename.png in Resources */,
 				BECD95561954A2EA0046A172 /* Default@2x.png in Resources */,
-				BEAC47CC198106BB00342E48 /* uv_article.png in Resources */,
 				BE4630241953191F000456DA /* icon-detail-song@2x.png in Resources */,
 				BE8395801931D9240094E544 /* rest_eighth.png in Resources */,
-				BEAC47CE198106BB00342E48 /* uv_heart.png in Resources */,
 				BEA4625D19825E9200812B22 /* Icon-60@2x.png in Resources */,
 				BECD95551954A2EA0046A172 /* Default.png in Resources */,
 				BE8395641931D9240094E544 /* bar_standard.png in Resources */,
@@ -1009,7 +910,6 @@
 				BEA4626119825E9200812B22 /* Icon-76@2x.png in Resources */,
 				BE8395811931D9240094E544 /* rest_eighth@2x.png in Resources */,
 				BEC08678191F34C500B8DC2A /* InfoPlist.strings in Resources */,
-				BEAC47D0198106BB00342E48 /* uv_idea.png in Resources */,
 				BE8395821931D9240094E544 /* rest_eighth_point.png in Resources */,
 				BE8395631931D9240094E544 /* bar_end_repeat@2x.png in Resources */,
 				BE8395871931D9240094E544 /* rest_half_point@2x.png in Resources */,
@@ -1035,7 +935,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE2821B11962CD0000640F58 /* PlayDetailViewController.m in Sources */,
 				BEC086B7191F35EF00B8DC2A /* UIViewController+REFrostedViewController.m in Sources */,
 				BEC086B6191F35EF00B8DC2A /* UIView+REFrostedViewController.m in Sources */,
 				BEC086B3191F35EF00B8DC2A /* REFrostedContainerViewController.m in Sources */,
@@ -1117,45 +1016,6 @@
 				BE58EEAA19345AFC00DEEA9F /* ko */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		BEAC47A3198106BA00342E48 /* UserVoice.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BEAC47A4198106BA00342E48 /* ca */,
-				BEAC47A5198106BA00342E48 /* cs */,
-				BEAC47A6198106BA00342E48 /* da */,
-				BEAC47A7198106BA00342E48 /* de */,
-				BEAC47A8198106BA00342E48 /* el */,
-				BEAC47A9198106BA00342E48 /* en-GB */,
-				BEAC47AA198106BA00342E48 /* en */,
-				BEAC47AB198106BA00342E48 /* es */,
-				BEAC47AC198106BA00342E48 /* fi */,
-				BEAC47AD198106BA00342E48 /* fr */,
-				BEAC47AE198106BA00342E48 /* hr */,
-				BEAC47AF198106BB00342E48 /* hu */,
-				BEAC47B0198106BB00342E48 /* id */,
-				BEAC47B1198106BB00342E48 /* it */,
-				BEAC47B2198106BB00342E48 /* ja */,
-				BEAC47B3198106BB00342E48 /* ko */,
-				BEAC47B4198106BB00342E48 /* ms */,
-				BEAC47B5198106BB00342E48 /* nb */,
-				BEAC47B6198106BB00342E48 /* nl */,
-				BEAC47B7198106BB00342E48 /* pl */,
-				BEAC47B8198106BB00342E48 /* pt-PT */,
-				BEAC47B9198106BB00342E48 /* pt */,
-				BEAC47BA198106BB00342E48 /* ro */,
-				BEAC47BB198106BB00342E48 /* ru */,
-				BEAC47BC198106BB00342E48 /* sk */,
-				BEAC47BD198106BB00342E48 /* sv */,
-				BEAC47BE198106BB00342E48 /* th */,
-				BEAC47BF198106BB00342E48 /* tr */,
-				BEAC47C0198106BB00342E48 /* uk */,
-				BEAC47C7198106BB00342E48 /* vi */,
-				BEAC47C8198106BB00342E48 /* zh-Hans */,
-				BEAC47C9198106BB00342E48 /* zh-Hant */,
-			);
-			name = UserVoice.strings;
 			sourceTree = "<group>";
 		};
 		BEC08676191F34C500B8DC2A /* InfoPlist.strings */ = {
@@ -1287,7 +1147,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "codex/codex-Prefix.pch";
 				INFOPLIST_FILE = "codex/codex-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GA",
@@ -1315,7 +1175,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "codex/codex-Prefix.pch";
 				INFOPLIST_FILE = "codex/codex-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GA",
