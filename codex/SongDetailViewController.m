@@ -19,6 +19,8 @@
 #define DATABASE_NAME @"codex.rdb"
 #define PLAY_LIST_LIMIT 15
 #define DEFAULT_SCALE 1.0
+#define MOVE_PREV_SONG 0
+#define MOVE_NEXT_SONG 1
 
 //#define NSLog //
 
@@ -282,6 +284,9 @@
     */
     
     [_noteView removeFromSuperview];
+    [_menu removeFromSuperview];
+    [_prevSong removeFromSuperview];
+    [_nextSong removeFromSuperview];
     
     [self initValue];
     
@@ -488,8 +493,37 @@
     
     self.menu.startPoint = CGPointMake(_menuMarginX, (_screenHeight - _menuMarginX - menuHeightPadding));
     [self.view addSubview:self.menu];
+    
+    
+    if(_isPlaylist){
+        self.prevSong = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [self.prevSong addTarget:self action:@selector(moveSong:) forControlEvents:UIControlEventTouchUpInside];
+        [self.prevSong setFrame:CGRectMake((_screenWidth - 44 - 36 - 8), (_screenHeight - 44 - menuHeightPadding), 36, 36)];
+//        [self.prevSong setExclusiveTouch:YES];
+        [self.prevSong setTag:MOVE_PREV_SONG];
+        [self.prevSong setBackgroundImage:[UIImage imageNamed:@"btn_left.png"] forState:UIControlStateNormal];
+        [self.view addSubview:self.prevSong];
+        
+        self.nextSong = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [self.nextSong addTarget:self action:@selector(moveSong:) forControlEvents:UIControlEventTouchUpInside];
+        [self.nextSong setFrame:CGRectMake((_screenWidth - 44), (_screenHeight - 44 - menuHeightPadding), 36, 36)];
+//        [self.nextSong setExclusiveTouch:YES];
+        [self.nextSong setTag:MOVE_NEXT_SONG];
+        [self.nextSong setBackgroundImage:[UIImage imageNamed:@"btn_right.png"] forState:UIControlStateNormal];
+        [self.view addSubview:self.nextSong];
+    }
+    
 }
 
+
+-(void) moveSong:(UIButton*)sender
+{
+    if(sender.tag == MOVE_PREV_SONG){
+        [self swiperight:nil];
+    } else if(sender.tag == MOVE_NEXT_SONG){
+        [self swipeleft:nil];
+    }
+}
 
 - (void) initNote {
 //    NSLog(@"song info id : %d", self.songInfo.song_info_id);
