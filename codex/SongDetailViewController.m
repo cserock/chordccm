@@ -22,7 +22,7 @@
 #define MOVE_PREV_SONG 0
 #define MOVE_NEXT_SONG 1
 
-//#define NSLog //
+#define NSLog //
 
 @interface SongDetailViewController ()
 
@@ -96,6 +96,12 @@
     [self autoPitch];
     
     _isScaled = NO;
+    
+    if([_appDelegate isPad]){
+        [self setScale:YES];
+        _isScaled = YES;
+    }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(orientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
@@ -165,18 +171,20 @@
         _isShowingLandscapeView = NO;
     }
     
-    //    NSLog(@"viewDidLoad : isShowingLandscapeView : %d", _isShowingLandscapeView);
+    NSLog(@"viewDidLoad : isShowingLandscapeView : %d", _isShowingLandscapeView);
     
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     _screenWidth = screenRect.size.width;
     _screenHeight = screenRect.size.height;
     
+    /*
     if(_isShowingLandscapeView){
         self.view.frame =  CGRectMake(0, 0, _screenWidth, _screenHeight);
         self.view.bounds = CGRectMake(0, 0, _screenHeight, _screenWidth);
         _screenWidth = screenRect.size.height;
         _screenHeight = screenRect.size.width;
     }
+    */
     
     NSLog(@"viewDidLoad : %f %f", _screenWidth, _screenHeight);
     
@@ -192,14 +200,16 @@
     }
     // e : get beat
     
-    _lineMarginY = 40.0f;
+//    _lineMarginY = 40.0f;
+    _lineMarginY = 30.0f;
     _lyricHeight = 20.0f;
     
     if(_beatCountInBar == 6){
         _lyricHeight = 30.0f;
     }
     
-    _startY = 50.0f;
+//    _startY = 50.0f;
+    _startY = 40.0f;
     _chordPadding = 2.0f;
     
     if([_appDelegate isPad]){
@@ -625,7 +635,16 @@
     
     [self.noteScrollView setContentSize:CGSizeMake(_screenWidth, _lineMarginY*(1+_tableCount))];
     
-    self.noteView = [[UIView alloc] initWithFrame: CGRectMake(0,0,_screenWidth,_screenHeight)];
+    
+    float viewWidth = _screenWidth;
+    float xPostion = 0.0f;
+    
+    if([_appDelegate isPad]){
+        viewWidth = 768.0f;
+        xPostion = (_screenWidth - viewWidth)/2;
+    }
+    
+    self.noteView = [[UIView alloc] initWithFrame: CGRectMake(xPostion, 0, viewWidth,_screenHeight)];
    // [self.noteView setContentSize:CGSizeMake(_screenWidth, _lineMarginY*(1+_tableCount))];
     [self.noteView setBackgroundColor: [UIColor clearColor]];
     [self.noteScrollView addSubview: self.noteView];
@@ -646,6 +665,9 @@
 //    NSLog(@"%d, %d, %d", lineNum, _beatCountInBar, _beatMaxCount);
     
     CGFloat lineWidth = _screenWidth-(_lineX*2.0f);
+    if([_appDelegate isPad]){
+        lineWidth = 768.0-(_lineX*2.0f);
+    }
     CGFloat lineY = (_lineMarginY * lineNum) + _startY;
     
     UIView *lineView = [[UIView alloc] initWithFrame: CGRectMake(_lineX, lineY, lineWidth, _lineHeight/2)];
@@ -675,6 +697,11 @@
     CGFloat cellX = _lineX;
     
     CGFloat lineWidth = _screenWidth-(_lineX*2.0f);
+    if([_appDelegate isPad]){
+        lineWidth = 768.0-(_lineX*2.0f);
+    }
+    
+    
     int totalBeatCountInLine = _beatCountInBar * _barCountInLine;
     CGFloat cellWidth = lineWidth / totalBeatCountInLine;
     
@@ -684,10 +711,11 @@
     
     _fontSize = cellWidth;
     
+    /*
     if(_isShowingLandscapeView){
         _fontSize = cellWidth - 5.0;
     }
-    
+    */
 //    NSLog(@"_fontSize : %f", _fontSize);
 
     
@@ -811,9 +839,12 @@
                     }
                 }
                 
+                
+                /*
                 if(_isShowingLandscapeView){
                     barType_lineX = cellX - (_lineX/0.8);
                 }
+                 */
             }
             
             UIImage *barTypeImage = [UIImage imageNamed:barImageFileName];
@@ -1854,67 +1885,50 @@
 
 - (void)orientationChanged:(NSNotification *)notification
 {
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     
-    if((orientation == UIInterfaceOrientationPortrait) && _isShowingLandscapeView) {
+    if([_appDelegate isPad]){
+    
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
         
-        _isShowingLandscapeView = NO;
-        
-        CGRect screenRect = [[UIScreen mainScreen] bounds];
-        _screenWidth = screenRect.size.width;
-        _screenHeight = screenRect.size.height;
-        
-        self.view.frame =  CGRectMake(0, 0, _screenWidth, _screenHeight);
-        self.view.bounds = CGRectMake(0, 0, _screenWidth, _screenHeight);
-        _screenWidth = screenRect.size.width;
-        _screenHeight = screenRect.size.height;
-        
-        NSLog(@"Portrait : %f %f", _screenWidth, _screenHeight);
-        
-        [self resetView];
-        
-        // s: make view
-        [self makeView];
-        // e: make view
-        
-        // s: make note
-        [self makeNote];
-        // e: make note
-        
-        // s: make menu
-        [self makeMenu];
-        // e: make menu
-        
-    } else if((orientation == UIInterfaceOrientationLandscapeRight) && !_isShowingLandscapeView) {
-        
-        _isShowingLandscapeView = YES;
-        
-        CGRect screenRect = [[UIScreen mainScreen] bounds];
-        _screenWidth = screenRect.size.width;
-        _screenHeight = screenRect.size.height;
-        
-        self.view.frame =  CGRectMake(0, 0, _screenWidth, _screenHeight);
-        self.view.bounds = CGRectMake(0, 0, _screenHeight, _screenWidth);
-        _screenWidth = screenRect.size.height;
-        _screenHeight = screenRect.size.width;
-        
-        // 480, 320
-        NSLog(@"Landscape : %f %f", _screenWidth, _screenHeight);
-        
-        [self resetView];
-        
-        // s: make view
-        [self makeView];
-        // e: make view
-        
-        // s: make note
-        [self makeNote];
-        // e: make note
-        
-        // s: make menu
-        [self makeMenu];
-        // e: make menu
+        if( (orientation == UIInterfaceOrientationPortrait) || (orientation == UIInterfaceOrientationLandscapeRight) || (orientation == UIInterfaceOrientationLandscapeLeft)) {
+            [_noteScrollView removeFromSuperview];
+            [_noteView removeFromSuperview];
+            [_menu removeFromSuperview];
+            [_prevSong removeFromSuperview];
+            [_nextSong removeFromSuperview];
+            
+            [self initValue];
+            
+            self.noteScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(0, 64,_screenWidth,_screenHeight)];
+            [self.noteScrollView setBackgroundColor: [UIColor clearColor]];
+            [self.view addSubview: self.noteScrollView];
+            
+            // s: make view
+            [self makeView];
+            // e: make view
+            
+            // s: init note
+            [self initNote];
+            // e: init note
+            
+            // s: make note
+            [self makeNote];
+            // e: make note
+            
+            // s: make menu
+            [self makeMenu];
+            // e: make menu
+            
+            [self autoPitch];
+            
+            if(_isScaled){
+                [self setScale:YES];
+            }
+        }
+    
     }
+    return;
+    
 }
 
 - (void) confirmConnectToYoutube {
