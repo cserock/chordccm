@@ -19,6 +19,8 @@
 #define DATABASE_NAME @"codex.rdb"
 #define PLAY_LIST_LIMIT 15
 #define DEFAULT_SCALE 1.0
+#define MOVE_PREV_SONG 0
+#define MOVE_NEXT_SONG 1
 
 #define NSLog //
 
@@ -94,6 +96,12 @@
     [self autoPitch];
     
     _isScaled = NO;
+    
+    if([_appDelegate isPad]){
+        [self setScale:YES];
+        _isScaled = YES;
+    }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(orientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
@@ -111,10 +119,25 @@
     swiperight.direction=UISwipeGestureRecognizerDirectionRight;
     [self.view addGestureRecognizer:swiperight];
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
     if(_isPlaylist){
-        [self.view makeToast:@"좌,우로 스와이핑 하면 곡 이동을 할 수 있습니다."];
+        
+        BOOL hasVisitedPlayList = [defaults boolForKey:@"hasVisitedPlayList"];
+        if(!hasVisitedPlayList){
+            [self.view makeToast:@"좌,우로 스와이핑 하면 곡 이동을 할 수 있습니다."];
+            [defaults setBool:YES forKey:@"hasVisitedPlayList"];
+            [defaults synchronize];
+        }
+        
     } else {
-        [self.view makeToast:@"화면을 두 번 탭 하면 확대/축소 할 수 있습니다."];
+        
+        BOOL isFirstLoading = [defaults boolForKey:@"isFirstLoading"];
+        if(!isFirstLoading){
+            [self.view makeToast:@"화면을 두 번 탭 하면 확대/축소 할 수 있습니다."];
+            [defaults setBool:YES forKey:@"isFirstLoading"];
+            [defaults synchronize];
+        }
     }
 }
 
@@ -148,18 +171,20 @@
         _isShowingLandscapeView = NO;
     }
     
-    //    NSLog(@"viewDidLoad : isShowingLandscapeView : %d", _isShowingLandscapeView);
+    NSLog(@"viewDidLoad : isShowingLandscapeView : %d", _isShowingLandscapeView);
     
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     _screenWidth = screenRect.size.width;
     _screenHeight = screenRect.size.height;
     
+    /*
     if(_isShowingLandscapeView){
         self.view.frame =  CGRectMake(0, 0, _screenWidth, _screenHeight);
         self.view.bounds = CGRectMake(0, 0, _screenHeight, _screenWidth);
         _screenWidth = screenRect.size.height;
         _screenHeight = screenRect.size.width;
     }
+    */
     
     NSLog(@"viewDidLoad : %f %f", _screenWidth, _screenHeight);
     
@@ -175,14 +200,16 @@
     }
     // e : get beat
     
-    _lineMarginY = 40.0f;
+//    _lineMarginY = 40.0f;
+    _lineMarginY = 30.0f;
     _lyricHeight = 20.0f;
     
     if(_beatCountInBar == 6){
         _lyricHeight = 30.0f;
     }
     
-    _startY = 50.0f;
+//    _startY = 50.0f;
+    _startY = 40.0f;
     _chordPadding = 2.0f;
     
     if([_appDelegate isPad]){
@@ -267,6 +294,9 @@
     */
     
     [_noteView removeFromSuperview];
+    [_menu removeFromSuperview];
+    [_prevSong removeFromSuperview];
+    [_nextSong removeFromSuperview];
     
     [self initValue];
     
@@ -302,6 +332,10 @@
     //Do what you want here
     NSLog(@"swipeleft");
     
+    if(!_isPlaylist){
+        return;
+    }
+    
     if(_bookmarkIndex >= (_playListSongsCount - 1)){
         [self.view makeToast:@"플레이 리스트 마지막 곡 입니다."];
         return;
@@ -318,6 +352,10 @@
 {
     //Do what you want here
     NSLog(@"swiperight");
+    
+    if(!_isPlaylist){
+        return;
+    }
     
     if(_bookmarkIndex <= 0){
         [self.view makeToast:@"플레이 리스트 첫 곡 입니다."];
@@ -465,8 +503,37 @@
     
     self.menu.startPoint = CGPointMake(_menuMarginX, (_screenHeight - _menuMarginX - menuHeightPadding));
     [self.view addSubview:self.menu];
+    
+    
+    if(_isPlaylist){
+        self.prevSong = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [self.prevSong addTarget:self action:@selector(moveSong:) forControlEvents:UIControlEventTouchUpInside];
+        [self.prevSong setFrame:CGRectMake((_screenWidth - 44 - 36 - 8), (_screenHeight - 44 - menuHeightPadding), 36, 36)];
+//        [self.prevSong setExclusiveTouch:YES];
+        [self.prevSong setTag:MOVE_PREV_SONG];
+        [self.prevSong setBackgroundImage:[UIImage imageNamed:@"btn_left.png"] forState:UIControlStateNormal];
+        [self.view addSubview:self.prevSong];
+        
+        self.nextSong = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [self.nextSong addTarget:self action:@selector(moveSong:) forControlEvents:UIControlEventTouchUpInside];
+        [self.nextSong setFrame:CGRectMake((_screenWidth - 44), (_screenHeight - 44 - menuHeightPadding), 36, 36)];
+//        [self.nextSong setExclusiveTouch:YES];
+        [self.nextSong setTag:MOVE_NEXT_SONG];
+        [self.nextSong setBackgroundImage:[UIImage imageNamed:@"btn_right.png"] forState:UIControlStateNormal];
+        [self.view addSubview:self.nextSong];
+    }
+    
 }
 
+
+-(void) moveSong:(UIButton*)sender
+{
+    if(sender.tag == MOVE_PREV_SONG){
+        [self swiperight:nil];
+    } else if(sender.tag == MOVE_NEXT_SONG){
+        [self swipeleft:nil];
+    }
+}
 
 - (void) initNote {
 //    NSLog(@"song info id : %d", self.songInfo.song_info_id);
@@ -568,7 +635,16 @@
     
     [self.noteScrollView setContentSize:CGSizeMake(_screenWidth, _lineMarginY*(1+_tableCount))];
     
-    self.noteView = [[UIView alloc] initWithFrame: CGRectMake(0,0,_screenWidth,_screenHeight)];
+    
+    float viewWidth = _screenWidth;
+    float xPostion = 0.0f;
+    
+    if([_appDelegate isPad]){
+        viewWidth = 768.0f;
+        xPostion = (_screenWidth - viewWidth)/2;
+    }
+    
+    self.noteView = [[UIView alloc] initWithFrame: CGRectMake(xPostion, 0, viewWidth,_screenHeight)];
    // [self.noteView setContentSize:CGSizeMake(_screenWidth, _lineMarginY*(1+_tableCount))];
     [self.noteView setBackgroundColor: [UIColor clearColor]];
     [self.noteScrollView addSubview: self.noteView];
@@ -589,10 +665,13 @@
 //    NSLog(@"%d, %d, %d", lineNum, _beatCountInBar, _beatMaxCount);
     
     CGFloat lineWidth = _screenWidth-(_lineX*2.0f);
+    if([_appDelegate isPad]){
+        lineWidth = 768.0-(_lineX*2.0f);
+    }
     CGFloat lineY = (_lineMarginY * lineNum) + _startY;
     
-    UIView *lineView = [[UIView alloc] initWithFrame: CGRectMake(_lineX, lineY, lineWidth, _lineHeight)];
-    [lineView setBackgroundColor: [UIColor blackColor]];
+    UIView *lineView = [[UIView alloc] initWithFrame: CGRectMake(_lineX, lineY, lineWidth, _lineHeight/2)];
+    [lineView setBackgroundColor: [UIColor grayColor]];
     [self.noteView addSubview: lineView];
     
     /*
@@ -618,6 +697,11 @@
     CGFloat cellX = _lineX;
     
     CGFloat lineWidth = _screenWidth-(_lineX*2.0f);
+    if([_appDelegate isPad]){
+        lineWidth = 768.0-(_lineX*2.0f);
+    }
+    
+    
     int totalBeatCountInLine = _beatCountInBar * _barCountInLine;
     CGFloat cellWidth = lineWidth / totalBeatCountInLine;
     
@@ -627,10 +711,11 @@
     
     _fontSize = cellWidth;
     
+    /*
     if(_isShowingLandscapeView){
         _fontSize = cellWidth - 5.0;
     }
-    
+    */
 //    NSLog(@"_fontSize : %f", _fontSize);
 
     
@@ -754,9 +839,12 @@
                     }
                 }
                 
+                
+                /*
                 if(_isShowingLandscapeView){
                     barType_lineX = cellX - (_lineX/0.8);
                 }
+                 */
             }
             
             UIImage *barTypeImage = [UIImage imageNamed:barImageFileName];
@@ -774,10 +862,17 @@
         float chordPithYPadding = 0.0f;
         float playTypeFontAdjust = 0.0f;
         
+        float chordFontZoomIn = 1.2f;
+        float cellWidthAdjust = 1.6f;
+        float chordOptionwidthAdjust = 0.68f;
+        
+        
         if(_beatCountInBar == 6){
             chordFontPadding = -2.0;
             chordFontAdjust = -2.0;
             chordPithYPadding = 2.0;
+            chordOptionwidthAdjust = 0.6f;
+            cellWidthAdjust = 1.8f;
         }
         
         
@@ -785,11 +880,13 @@
             cornerRadius = 4.0f;
             restTypePadding = 0.5f;
             playTypeFontAdjust = -4.0;
+            cellWidthAdjust = 2.0f;
             
             if(_beatCountInBar == 6){
                 chordFontPadding = 0.0;
                 chordFontAdjust = -6.0;
                 chordPithYPadding = 6.0;
+                cellWidthAdjust = 1.6f;
             }
         }
         
@@ -819,91 +916,127 @@
         if(songData){
             
             if(![songData.chord_1 isEqualToString:@""]){
-
-                NSString *chordString = nil;
                 
-                if([songData.chord_2 isEqualToString:@""]){
-                    chordString = [NSString stringWithFormat:@"%@%@", songData.chord_1, songData.chord_1_option];
-                } else {
-                    chordString = [NSString stringWithFormat:@"%@%@/%@%@", songData.chord_1, songData.chord_1_option, songData.chord_2,songData.chord_2_option];
+                NSString *minSample = @"G";
+                CGSize labelMinSize = [minSample sizeWithFont:[UIFont systemFontOfSize:(_fontSize+chordFontPadding)*chordFontZoomIn]];
+                
+                NSString *sample = [NSString stringWithFormat:@"%@", songData.chord_1];
+                CGSize labelSize = [sample sizeWithFont:[UIFont systemFontOfSize:(_fontSize+chordFontPadding)*chordFontZoomIn]];
+                
+                if(labelMinSize.width > labelSize.width){
+                    labelSize.width = labelMinSize.width;
                 }
                 
-                CGSize labelSize = [chordString sizeWithFont:[UIFont systemFontOfSize:_fontSize+chordFontPadding]];
+                float chordCellWidth = (labelSize.width*cellWidthAdjust) + _chordPadding;
+                float chordCellHeight = (cellHeight*2) + _chordPadding + chordFontAdjust;
                 
-                UILabel *cellChord = [[UILabel alloc] initWithFrame:CGRectMake(cellX, chordlineY, (labelSize.width + _chordPadding), (cellHeight + _chordPadding + chordFontAdjust))];
-                cellChord.tag = beatIndex;
-                [cellChord setText:chordString];
-                [cellChord setTextColor:[UIColor whiteColor]];
-                [cellChord setBackgroundColor:[UIColor colorWithRed:(4/255.f) green:(189/255.f) blue:(204/255.f) alpha:1.0f]];
-                [cellChord setFont:[UIFont fontWithName: @"AppleSDGothicNeo-Medium" size: _fontSize + chordFontAdjust]];
-                cellChord.textAlignment = NSTextAlignmentCenter;
+                UIView *cellChord = [[UILabel alloc] initWithFrame:CGRectMake(cellX, chordPitchlineY, chordCellWidth, chordCellHeight)];
+                [cellChord setBackgroundColor:[UIColor clearColor]];
+                
+                NSString *chordString1 = [NSString stringWithFormat:@"%@", songData.chord_1];
+                UILabel *cellChord1 = [[UILabel alloc] initWithFrame:CGRectMake(0, chordCellHeight/2, chordCellWidth/2, chordCellHeight/2)];
+                [cellChord1 setText:chordString1];
+                cellChord1.tag = beatIndex;
+                [cellChord1 setTextColor:[UIColor blackColor]];
+                [cellChord1 setBackgroundColor:[UIColor clearColor]];
+                [cellChord1 setFont:[UIFont fontWithName: @"ChalkboardSE-Regular" size: (_fontSize + chordFontAdjust)*chordFontZoomIn]];
+//                cellChord.textAlignment = NSTextAlignmentCenter;
                 cellChord.clipsToBounds = YES;
-                cellChord.layer.cornerRadius = cornerRadius;
+                //                cellChord.layer.cornerRadius = cornerRadius;
+                [cellChord addSubview:cellChord1];
+                
+//                NSString *chordOptionString1 = [NSString stringWithFormat:@"%@", songData.chord_1_option];
+                
+                // chord Pitch
+                NSString *chordPitchString1 = @"";
+                if(![[songData.chord_1_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]){
+                    chordPitchString1 = [NSString stringWithFormat:@"%@", [self getChordPitchString:[songData.chord_1_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]]];
+                }
+                UILabel *cellChordPitch1 = [[UILabel alloc] initWithFrame:CGRectMake(0, chordCellHeight/6, chordCellWidth/2, (chordCellHeight*0.5))];
+                [cellChordPitch1 setText:chordPitchString1];
+                cellChordPitch1.tag = 10000 + beatIndex;
+                [cellChordPitch1 setTextColor:[UIColor blackColor]];
+                [cellChordPitch1 setBackgroundColor:[UIColor clearColor]];
+                [cellChordPitch1 setFont:[UIFont fontWithName: @"ChalkboardSE-Bold" size: (_fontSize + chordFontAdjust)*chordFontZoomIn]];
+                                    cellChordPitch1.textAlignment = NSTextAlignmentCenter;
+                //                    cellChordPitch1.clipsToBounds = YES;
+                
+                [cellChord addSubview:cellChordPitch1];
+                
+                // chord option #1
+//                NSString *chordOptionString1 = @"maj7";
+                NSString *chordOptionString1 = [NSString stringWithFormat:@"%@", songData.chord_1_option];
+                UILabel *cellChordOption1 = [[UILabel alloc] initWithFrame:CGRectMake(cellX + chordCellWidth/2.6, (chordPitchlineY+(chordCellHeight/8)), chordCellWidth, chordCellHeight)];
+                [cellChordOption1 setText:chordOptionString1];
+                [cellChordOption1 setTextColor:[UIColor blackColor]];
+                [cellChordOption1 setBackgroundColor:[UIColor clearColor]];
+                [cellChordOption1 setFont:[UIFont fontWithName: @"ChalkboardSE-Regular" size: ((_fontSize + chordFontAdjust)*chordFontZoomIn)*chordOptionwidthAdjust]];
+                cellChord.clipsToBounds = YES;
+                [self.noteView addSubview:cellChordOption1];
+
+                
+                if(![songData.chord_2 isEqualToString:@""]){
+                
+                    NSString *chordString2 = [NSString stringWithFormat:@"%@", songData.chord_2];
+                    UILabel *cellChord2 = [[UILabel alloc] initWithFrame:CGRectMake(chordCellWidth/2, chordCellHeight/2, chordCellWidth, chordCellHeight/2)];
+                    [cellChord2 setText:chordString2];
+                    cellChord2.tag = 80000 + beatIndex;
+                    [cellChord2 setTextColor:[UIColor blackColor]];
+                    [cellChord2 setBackgroundColor:[UIColor clearColor]];
+                    [cellChord2 setFont:[UIFont fontWithName: @"ChalkboardSE-Regular" size: (_fontSize + chordFontAdjust)*chordFontZoomIn]];
+                    //                cellChord.textAlignment = NSTextAlignmentCenter;
+                    cellChord2.clipsToBounds = YES;
+                    //                cellChord.layer.cornerRadius = cornerRadius;
+                    [cellChord addSubview:cellChord2];
+                    
+                    NSString *seperatedString = @"/";
+                    UILabel *cellSeperated = [[UILabel alloc] initWithFrame:CGRectMake(0, chordCellHeight/2, chordCellWidth, chordCellHeight/2)];
+                    [cellSeperated setText:seperatedString];
+                    //                [cellChord setTextColor:[UIColor whiteColor]];
+                    [cellSeperated setTextColor:[UIColor blackColor]];
+                    [cellSeperated setBackgroundColor:[UIColor clearColor]];
+                    [cellSeperated setFont:[UIFont fontWithName: @"ChalkboardSE-Regular" size: (_fontSize + chordFontAdjust)*chordFontZoomIn]];
+                    cellSeperated.textAlignment = NSTextAlignmentCenter;
+                    cellSeperated.clipsToBounds = YES;
+                    
+                    [cellChord addSubview:cellSeperated];
+                    
+                    
+                    NSString *chordPitchString2 = @"";
+                    
+                    if(![[songData.chord_2_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]){
+                        chordPitchString2 = [NSString stringWithFormat:@"%@", [self getChordPitchString:[songData.chord_2_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]]];
+                    }
+                    UILabel *cellChordPitch2 = [[UILabel alloc] initWithFrame:CGRectMake(chordCellWidth/2, chordCellHeight/6, chordCellWidth/2, (chordCellHeight*0.5))];
+                    [cellChordPitch2 setText:chordPitchString2];
+                    cellChordPitch2.tag = 20000 + beatIndex;
+                    [cellChordPitch2 setTextColor:[UIColor blackColor]];
+                    [cellChordPitch2 setBackgroundColor:[UIColor clearColor]];
+                    [cellChordPitch2 setFont:[UIFont fontWithName: @"ChalkboardSE-Bold" size: (_fontSize + chordFontAdjust)*chordFontZoomIn]];
+                                        cellChordPitch2.textAlignment = NSTextAlignmentCenter;
+                    //                    cellChordPitch2.clipsToBounds = YES;
+                    
+                    [cellChord addSubview:cellChordPitch2];
+                    
+                    // chord option #2
+//                    NSString *chordOptionString2 = @"maj7";
+                    NSString *chordOptionString2 = [NSString stringWithFormat:@"%@", songData.chord_2_option];
+                    UILabel *cellChordOption2 = [[UILabel alloc] initWithFrame:CGRectMake(cellX + chordCellWidth/2.6 + chordCellWidth/3, (chordPitchlineY+(chordCellHeight/8)), chordCellWidth, chordCellHeight)];
+                    [cellChordOption2 setText:chordOptionString2];
+                    [cellChordOption2 setTextColor:[UIColor blackColor]];
+                    [cellChordOption2 setBackgroundColor:[UIColor clearColor]];
+                    [cellChordOption2 setFont:[UIFont fontWithName: @"ChalkboardSE-Regular" size: ((_fontSize + chordFontAdjust)*chordFontZoomIn)*chordOptionwidthAdjust]];
+                    cellChord.clipsToBounds = YES;
+                    [self.noteView addSubview:cellChordOption2];
+                    
+                }
+               
+                
                 [self.noteView addSubview:cellChord];
                 
                 
-                
-                // chord Pitch
-                NSString *chordPitchString = nil;
-                
-                if([[songData.chord_2_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]){
-                    chordPitchString = [NSString stringWithFormat:@"%@", [self getChordPitchString:songData.chord_1_pitch]];
-                } else {
-                    
-                    NSString *chord_1_pitch = @"  ";
-                    
-                    if(![[songData.chord_1_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]){
-                        chord_1_pitch = [self getChordPitchString:songData.chord_1_pitch];
-                    }
-                    
-                    chordPitchString = [NSString stringWithFormat:@"%@/%@", chord_1_pitch, [self getChordPitchString:songData.chord_2_pitch]];
-                }
-                
-                CGFloat chordPitch_lineX = cellX + (_lineX/chordPitchPadding);
-                
-                labelSize = [chordPitchString sizeWithFont:[UIFont systemFontOfSize:_fontSize+chordFontPadding]];
-                UILabel *cellChordPitch = [[UILabel alloc] initWithFrame:CGRectMake(chordPitch_lineX, chordPitchlineY+chordPithYPadding, (labelSize.width + _chordPadding), (cellHeight + _chordPadding + chordFontAdjust))];
-                cellChordPitch.tag = 10000 + beatIndex;
-                [cellChordPitch setText:chordPitchString];
-                [cellChordPitch setTextColor:[UIColor whiteColor]];
-                
-                if([[chordPitchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]){
-                    [cellChordPitch setBackgroundColor:[UIColor clearColor]];
-                } else {
-                    [cellChordPitch setBackgroundColor:[UIColor colorWithRed:(115/255.f) green:(194/255.f) blue:(125/255.f) alpha:1.0f]];
-                }
-                
-                [cellChordPitch setFont:[UIFont fontWithName: @"AppleSDGothicNeo-Bold" size: _fontSize + chordFontAdjust]];
-                cellChordPitch.textAlignment = NSTextAlignmentCenter;
-                cellChordPitch.clipsToBounds = YES;
-                cellChordPitch.layer.cornerRadius = cornerRadius;
-                [cellChordPitch sizeToFit];
-                [self.noteView addSubview:cellChordPitch];
-                
             }
-            
-            /*
-             if(![songData.chord_1_pitch isEqualToString:@""]){
-             
-             NSString *chordString = nil;
-             
-             if([songData.chord_2 isEqualToString:@""]){
-             chordString = [NSString stringWithFormat:@"%@%@%@", songData.chord_1, songData.chord_1_pitch, songData.chord_1_option];
-             } else {
-             chordString = [NSString stringWithFormat:@"%@%@%@/%@%@%@", songData.chord_1, songData.chord_1_pitch, songData.chord_1_option,songData.chord_2, songData.chord_2_pitch, songData.chord_2_option];
-             }
-             
-             CGSize labelSize = [chordString sizeWithFont:[UIFont systemFontOfSize:14.0f]];
-             UILabel *cellChord = [[UILabel alloc] initWithFrame:CGRectMake(cellX, chordlineY, labelSize.width, cellHeight)];
-             cellChord.tag = beatIndex;
-             [cellChord setText:chordString];
-             [cellChord setTextColor:[UIColor blackColor]];
-             [cellChord setBackgroundColor:[UIColor clearColor]];
-             [cellChord setFont:[UIFont fontWithName: @"Trebuchet MS" size: 8.0f]];
-             [self.noteView addSubview:cellChord];
-             }
-             */
-        }
+    }
         
         
         // restType
@@ -976,7 +1109,7 @@
                 cellBeat_cell.tag = 30000 + barIndex;
                 [cellBeat_cell setTextColor:[UIColor colorWithRed:(148/255.f) green:(123/255.f) blue:(131/255.f) alpha:1.0f]];
                 [cellBeat_cell setBackgroundColor:[UIColor clearColor]];
-                [cellBeat_cell setFont:[UIFont fontWithName: @"AppleSDGothicNeo-Medium" size: _fontSize]];
+                [cellBeat_cell setFont:[UIFont fontWithName: @"HelveticaNeue-Light" size: _fontSize]];
                 [self.noteView addSubview:cellBeat_cell];
                 
                 // Lyric_1_cell
@@ -984,7 +1117,7 @@
                 cellLyric_1_cell.tag = 40000 + barIndex;
                 [cellLyric_1_cell setTextColor:[UIColor colorWithRed:(61/255.f) green:(63/255.f) blue:(69/255.f) alpha:1.0f]];
                 [cellLyric_1_cell setBackgroundColor:[UIColor clearColor]];
-                [cellLyric_1_cell setFont:[UIFont fontWithName: @"AppleSDGothicNeo-Medium" size: _fontSize]];
+                [cellLyric_1_cell setFont:[UIFont fontWithName: @"HelveticaNeue-Light" size: _fontSize]];
                 [self.noteView addSubview:cellLyric_1_cell];
                 
                
@@ -994,7 +1127,7 @@
                     cellLyric_2_cell.tag = 50000 + barIndex;
                     [cellLyric_2_cell setTextColor:[UIColor colorWithRed:(61/255.f) green:(63/255.f) blue:(69/255.f) alpha:1.0f]];
                     [cellLyric_2_cell setBackgroundColor:[UIColor clearColor]];
-                    [cellLyric_2_cell setFont:[UIFont fontWithName: @"AppleSDGothicNeo-Medium" size: _fontSize]];
+                    [cellLyric_2_cell setFont:[UIFont fontWithName: @"HelveticaNeue-Light" size: _fontSize]];
                     [self.noteView addSubview:cellLyric_2_cell];
                 }
                 
@@ -1004,7 +1137,7 @@
                     cellLyric_3_cell.tag = 60000 + barIndex;
                     [cellLyric_3_cell setTextColor:[UIColor colorWithRed:(61/255.f) green:(63/255.f) blue:(69/255.f) alpha:1.0f]];
                     [cellLyric_3_cell setBackgroundColor:[UIColor clearColor]];
-                    [cellLyric_3_cell setFont:[UIFont fontWithName: @"AppleSDGothicNeo-Medium" size: _fontSize]];
+                    [cellLyric_3_cell setFont:[UIFont fontWithName: @"HelveticaNeue-Light" size: _fontSize]];
                     [self.noteView addSubview:cellLyric_3_cell];
                 }
                
@@ -1014,7 +1147,7 @@
                     cellLyric_4_cell.tag = 70000 + barIndex;
                     [cellLyric_4_cell setTextColor:[UIColor colorWithRed:(61/255.f) green:(63/255.f) blue:(69/255.f) alpha:1.0f]];
                     [cellLyric_4_cell setBackgroundColor:[UIColor clearColor]];
-                    [cellLyric_4_cell setFont:[UIFont fontWithName: @"AppleSDGothicNeo-Medium" size: _fontSize]];
+                    [cellLyric_4_cell setFont:[UIFont fontWithName: @"HelveticaNeue-Light" size: _fontSize]];
                     [self.noteView addSubview:cellLyric_4_cell];
                 }
                 
@@ -1528,68 +1661,42 @@
 
 - (void)updateChordLabel:(SongData*)song {
     
-    
-    float chordFontPadding = 2.6f;
-    
-    if(_beatCountInBar == 6){
-        chordFontPadding = -2.0;
-    }
-    
-    
-    if([_appDelegate isPad]){
-        
-        if(_beatCountInBar == 6){
-            chordFontPadding = 0.0;
-        }
-    }
-    
-    
-    UILabel *chordLabel = (UILabel *)[self.noteView viewWithTag:song.beat_index];
+    // chord
+    UILabel *chordLabel = nil;
     NSString *chordString = nil;
     
-    if([song.chord_2 isEqualToString:@""]){
-        chordString = [NSString stringWithFormat:@"%@%@", song.chord_1, song.chord_1_option];
-    } else {
-        chordString = [NSString stringWithFormat:@"%@%@/%@%@", song.chord_1, song.chord_1_option, song.chord_2, song.chord_2_option];
+    if(![song.chord_1 isEqualToString:@""]){
+//        chordString = [NSString stringWithFormat:@"%@%@", song.chord_1, song.chord_1_option];
+        chordLabel = (UILabel *)[self.noteView viewWithTag:song.beat_index];
+        chordString = [NSString stringWithFormat:@"%@", song.chord_1];
+        [chordLabel setText:chordString];
     }
-    
-    CGSize labelSize = [chordString sizeWithFont:[UIFont systemFontOfSize:_fontSize + chordFontPadding]];
-    CGRect newLabelFrame = chordLabel.frame;
-    newLabelFrame.size.width = labelSize.width + _chordPadding;
-    chordLabel.frame = newLabelFrame;
-    [chordLabel setText:chordString];
-    
-    // chord Pitch
-    UILabel *chordPitchLabel = (UILabel *)[self.noteView viewWithTag:(10000+song.beat_index)];
-    NSString *chordPitchString = nil;
-    
-    
-    if([[song.chord_2_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]){
-        chordPitchString = [NSString stringWithFormat:@"%@", [self getChordPitchString:song.chord_1_pitch]];
-    } else {
-        
-        NSString *chord_1_pitch = @"  ";
-        
-        if(![[song.chord_1_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]){
-            chord_1_pitch = [self getChordPitchString:song.chord_1_pitch];
-        }
-        
-        chordPitchString = [NSString stringWithFormat:@"%@/%@", chord_1_pitch, [self getChordPitchString:song.chord_2_pitch]];
+
+    if(![song.chord_2 isEqualToString:@""]){
+        //        chordString = [NSString stringWithFormat:@"%@%@", song.chord_1, song.chord_1_option];
+        chordLabel = (UILabel *)[self.noteView viewWithTag:(80000 +song.beat_index)];
+        chordString = [NSString stringWithFormat:@"%@", song.chord_2];
+        [chordLabel setText:chordString];
     }
-//    NSLog(@"chordPitchString : %@", chordPitchString);
+
     
-    labelSize = [chordPitchString sizeWithFont:[UIFont systemFontOfSize:_fontSize + chordFontPadding]];
-    CGRect newChordPitchLabelFrame = chordPitchLabel.frame;
-    newChordPitchLabelFrame.size.width = labelSize.width + _chordPadding;
-    chordPitchLabel.frame = newChordPitchLabelFrame;
+    // chord pitch
+    UILabel *chordPitchLabel = nil;
+    NSString *chordPitchString = @"";
+    
+    if(![[song.chord_1_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]){
+        chordPitchString = [NSString stringWithFormat:@"%@", [self getChordPitchString:[song.chord_1_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]]];
+    }
+    chordPitchLabel = (UILabel *)[self.noteView viewWithTag:(10000 +song.beat_index)];
     [chordPitchLabel setText:chordPitchString];
-    [chordPitchLabel sizeToFit];
     
-    if([[chordPitchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]){
-        [chordPitchLabel setBackgroundColor:[UIColor clearColor]];
-    } else {
-        [chordPitchLabel setBackgroundColor:[UIColor colorWithRed:(115/255.f) green:(194/255.f) blue:(125/255.f) alpha:1.0f]];
+    
+    if(![[song.chord_2_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]){
+        chordPitchString = [NSString stringWithFormat:@"%@", [self getChordPitchString:[song.chord_2_pitch stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]]];
     }
+    chordPitchLabel = (UILabel *)[self.noteView viewWithTag:(20000 +song.beat_index)];
+    [chordPitchLabel setText:chordPitchString];
+    
 }
 
 
@@ -1602,7 +1709,7 @@
     if([chordPitch isEqualToString:@"+"]){
         returnChordPitchString = @"♯";
     } else if([chordPitch isEqualToString:@"-"]){
-        returnChordPitchString = @"♭ ";
+        returnChordPitchString = @"♭";
     } else {
         returnChordPitchString = @"";
     }
@@ -1778,67 +1885,50 @@
 
 - (void)orientationChanged:(NSNotification *)notification
 {
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     
-    if((orientation == UIInterfaceOrientationPortrait) && _isShowingLandscapeView) {
+    if([_appDelegate isPad]){
+    
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
         
-        _isShowingLandscapeView = NO;
-        
-        CGRect screenRect = [[UIScreen mainScreen] bounds];
-        _screenWidth = screenRect.size.width;
-        _screenHeight = screenRect.size.height;
-        
-        self.view.frame =  CGRectMake(0, 0, _screenWidth, _screenHeight);
-        self.view.bounds = CGRectMake(0, 0, _screenWidth, _screenHeight);
-        _screenWidth = screenRect.size.width;
-        _screenHeight = screenRect.size.height;
-        
-        NSLog(@"Portrait : %f %f", _screenWidth, _screenHeight);
-        
-        [self resetView];
-        
-        // s: make view
-        [self makeView];
-        // e: make view
-        
-        // s: make note
-        [self makeNote];
-        // e: make note
-        
-        // s: make menu
-        [self makeMenu];
-        // e: make menu
-        
-    } else if((orientation == UIInterfaceOrientationLandscapeRight) && !_isShowingLandscapeView) {
-        
-        _isShowingLandscapeView = YES;
-        
-        CGRect screenRect = [[UIScreen mainScreen] bounds];
-        _screenWidth = screenRect.size.width;
-        _screenHeight = screenRect.size.height;
-        
-        self.view.frame =  CGRectMake(0, 0, _screenWidth, _screenHeight);
-        self.view.bounds = CGRectMake(0, 0, _screenHeight, _screenWidth);
-        _screenWidth = screenRect.size.height;
-        _screenHeight = screenRect.size.width;
-        
-        // 480, 320
-        NSLog(@"Landscape : %f %f", _screenWidth, _screenHeight);
-        
-        [self resetView];
-        
-        // s: make view
-        [self makeView];
-        // e: make view
-        
-        // s: make note
-        [self makeNote];
-        // e: make note
-        
-        // s: make menu
-        [self makeMenu];
-        // e: make menu
+        if( (orientation == UIInterfaceOrientationPortrait) || (orientation == UIInterfaceOrientationLandscapeRight) || (orientation == UIInterfaceOrientationLandscapeLeft)) {
+            [_noteScrollView removeFromSuperview];
+            [_noteView removeFromSuperview];
+            [_menu removeFromSuperview];
+            [_prevSong removeFromSuperview];
+            [_nextSong removeFromSuperview];
+            
+            [self initValue];
+            
+            self.noteScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(0, 64,_screenWidth,_screenHeight)];
+            [self.noteScrollView setBackgroundColor: [UIColor clearColor]];
+            [self.view addSubview: self.noteScrollView];
+            
+            // s: make view
+            [self makeView];
+            // e: make view
+            
+            // s: init note
+            [self initNote];
+            // e: init note
+            
+            // s: make note
+            [self makeNote];
+            // e: make note
+            
+            // s: make menu
+            [self makeMenu];
+            // e: make menu
+            
+            [self autoPitch];
+            
+            if(_isScaled){
+                [self setScale:YES];
+            }
+        }
+    
     }
+    return;
+    
 }
 
 - (void) confirmConnectToYoutube {

@@ -140,6 +140,10 @@
 		CF0757A71E1DE3AA008F80A3 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF0757A31E1DE3AA008F80A3 /* FBSDKLoginKit.framework */; };
 		CF0757A81E1DE3AA008F80A3 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF0757A41E1DE3AA008F80A3 /* FBSDKShareKit.framework */; };
 		CF0757AA1E1E42F3008F80A3 /* KakaoOpenSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF0757A91E1E42F3008F80A3 /* KakaoOpenSDK.framework */; };
+		CF111A1D1E5592E1000AFEE0 /* btn_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CF111A191E5592E1000AFEE0 /* btn_left@2x.png */; };
+		CF111A1E1E5592E1000AFEE0 /* btn_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CF111A1A1E5592E1000AFEE0 /* btn_right@2x.png */; };
+		CF111A1F1E5592E1000AFEE0 /* btn_left.png in Resources */ = {isa = PBXBuildFile; fileRef = CF111A1B1E5592E1000AFEE0 /* btn_left.png */; };
+		CF111A201E5592E1000AFEE0 /* btn_right.png in Resources */ = {isa = PBXBuildFile; fileRef = CF111A1C1E5592E1000AFEE0 /* btn_right.png */; };
 		CF743FE71E1CFA1600E59F61 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CF743FE61E1CFA1600E59F61 /* libz.tbd */; };
 		CF743FEB1E1CFB3800E59F61 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CF743FEA1E1CFB3800E59F61 /* libsqlite3.0.tbd */; };
 /* End PBXBuildFile section */
@@ -330,6 +334,10 @@
 		CF0757A31E1DE3AA008F80A3 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../FacebookSDKs-iOS-4.18.0/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		CF0757A41E1DE3AA008F80A3 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "../FacebookSDKs-iOS-4.18.0/FBSDKShareKit.framework"; sourceTree = "<group>"; };
 		CF0757A91E1E42F3008F80A3 /* KakaoOpenSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KakaoOpenSDK.framework; path = Kakao/KakaoOpenSDK.framework; sourceTree = "<group>"; };
+		CF111A191E5592E1000AFEE0 /* btn_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_left@2x.png"; sourceTree = "<group>"; };
+		CF111A1A1E5592E1000AFEE0 /* btn_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_right@2x.png"; sourceTree = "<group>"; };
+		CF111A1B1E5592E1000AFEE0 /* btn_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_left.png; sourceTree = "<group>"; };
+		CF111A1C1E5592E1000AFEE0 /* btn_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_right.png; sourceTree = "<group>"; };
 		CF743FE61E1CFA1600E59F61 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		CF743FEA1E1CFB3800E59F61 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -476,6 +484,10 @@
 		BE8395271931D9240094E544 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CF111A191E5592E1000AFEE0 /* btn_left@2x.png */,
+				CF111A1A1E5592E1000AFEE0 /* btn_right@2x.png */,
+				CF111A1B1E5592E1000AFEE0 /* btn_left.png */,
+				CF111A1C1E5592E1000AFEE0 /* btn_right.png */,
 				BEA4624F19825E9200812B22 /* icons */,
 				BEE0D17F19584A0000BF9619 /* icon-edit-ok.png */,
 				BEE0D18019584A0000BF9619 /* icon-edit-ok@2x.png */,
@@ -833,6 +845,7 @@
 				BEA4626319825E9200812B22 /* Icon-Small-40@2x.png in Resources */,
 				BECD95511954A2C20046A172 /* Default@2x~iphone.png in Resources */,
 				BE8395721931D9240094E544 /* icon-plus-highlighted.png in Resources */,
+				CF111A1E1E5592E1000AFEE0 /* btn_right@2x.png in Resources */,
 				BE8395621931D9240094E544 /* bar_end_repeat.png in Resources */,
 				BE8395891931D9240094E544 /* rest_quarter@2x.png in Resources */,
 				BEA4625B19825E9200812B22 /* Icon-57.png in Resources */,
@@ -859,6 +872,7 @@
 				BE83955D1931D9240094E544 /* bar_begin_repeat@2x.png in Resources */,
 				BE8395771931D9240094E544 /* icon-reload@2x.png in Resources */,
 				BE8395681931D9240094E544 /* bg-addbutton.png in Resources */,
+				CF111A1F1E5592E1000AFEE0 /* btn_left.png in Resources */,
 				BE8395761931D9240094E544 /* icon-reload.png in Resources */,
 				BE8395661931D9240094E544 /* bg-addbutton-highlighted.png in Resources */,
 				BEE0D17D195846FE00BF9619 /* icon-edit.png in Resources */,
@@ -900,6 +914,7 @@
 				BE8395671931D9240094E544 /* bg-addbutton-highlighted@2x.png in Resources */,
 				BE83958E1931D9240094E544 /* rest_whole.png in Resources */,
 				BE58EEAD19345AFC00DEEA9F /* InfoPlist.strings in Resources */,
+				CF111A201E5592E1000AFEE0 /* btn_right.png in Resources */,
 				BE46301C19530D13000456DA /* icon-menu.png in Resources */,
 				BEA4626519825E9200812B22 /* Icon-Small@2x.png in Resources */,
 				BE46301D19530D13000456DA /* icon-menu@2x.png in Resources */,
@@ -907,6 +922,7 @@
 				BE83956D1931D9240094E544 /* bg-menuitem@2x.png in Resources */,
 				BE83958D1931D9240094E544 /* rest_sixteenth@2x.png in Resources */,
 				BEE0D17E195846FE00BF9619 /* icon-edit@2x.png in Resources */,
+				CF111A1D1E5592E1000AFEE0 /* btn_left@2x.png in Resources */,
 				BEA4626119825E9200812B22 /* Icon-76@2x.png in Resources */,
 				BE8395811931D9240094E544 /* rest_eighth@2x.png in Resources */,
 				BEC08678191F34C500B8DC2A /* InfoPlist.strings in Resources */,

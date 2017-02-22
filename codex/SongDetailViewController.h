@@ -61,6 +61,9 @@
 @property (nonatomic, assign) int playListSongIndex;
 @property (nonatomic, assign) BOOL isUpdating;
 
+@property (nonatomic, strong) UIButton *prevSong;
+@property (nonatomic, strong) UIButton *nextSong;
+
 - (void) makeNote;
 - (void) makeLine:(int)lineNum;
 - (void) makeContent:(int)lineNum;
