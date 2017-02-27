@@ -22,7 +22,7 @@
 #define MOVE_PREV_SONG 0
 #define MOVE_NEXT_SONG 1
 
-#define NSLog //
+//#define NSLog //
 
 @interface SongDetailViewController ()
 
@@ -593,9 +593,13 @@
     _songBarCount = self.songInfo.bar_count;
     _songLyricCount = self.songInfo.lyric_count;
     
+    
     if(_songLyricCount == 1){
         _songLyricCount = 2;
     }
+    
+    // for remove lyric
+    _songLyricCount = 1;
     
     _lineMarginY = _lineMarginY + (_songLyricCount * _lyricHeight);
     
@@ -1112,6 +1116,7 @@
                 [cellBeat_cell setFont:[UIFont fontWithName: @"HelveticaNeue-Light" size: _fontSize]];
                 [self.noteView addSubview:cellBeat_cell];
                 
+                /*
                 // Lyric_1_cell
                 TTTRegexAttributedLabel *cellLyric_1_cell = [[TTTRegexAttributedLabel alloc] initWithFrame:CGRectMake(cellX+2, lyric_1_lineY, barWidth, cellHeight+3)];
                 cellLyric_1_cell.tag = 40000 + barIndex;
@@ -1150,7 +1155,7 @@
                     [cellLyric_4_cell setFont:[UIFont fontWithName: @"HelveticaNeue-Light" size: _fontSize]];
                     [self.noteView addSubview:cellLyric_4_cell];
                 }
-                
+                */
             } else if((beatIndex % _beatCountInBar) == 0){
                 
                 // beat
@@ -1169,7 +1174,7 @@
                 Beat_Label.attributedText = attributedString;
                 _beatAllString = @"";
                 
-                
+                /*
                 // Lyric_1
                 TTTRegexAttributedLabel *Lyric_1_Label = (TTTRegexAttributedLabel *)[self.noteView viewWithTag:40000 + barIndex];
                 [Lyric_1_Label setLyricText:_lyric_1_AllString withBeatCountInBar:_beatCountInBar];
@@ -1195,6 +1200,7 @@
                     [Lyric_4_Label setLyricText:_lyric_4_AllString withBeatCountInBar:_beatCountInBar];
                     _lyric_4_AllString = @"";
                 }
+                 */
             }
         }
         cellX = cellX + cellWidth;

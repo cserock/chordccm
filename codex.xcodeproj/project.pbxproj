@@ -1170,9 +1170,10 @@
 					"$(PROJECT_DIR)/Uservoice",
 				);
 				OTHER_LDFLAGS = "-all_load";
+				PRODUCT_BUNDLE_IDENTIFIER = me.neosave.chordccm2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4fcf9de7-b260-485b-b35d-1a5f54b7f0a9";
-				PROVISIONING_PROFILE_SPECIFIER = me.neosave.chordccm.dev;
+				PROVISIONING_PROFILE = "3e88370e-71c7-499e-9ec2-551c8c5831e9";
+				PROVISIONING_PROFILE_SPECIFIER = me.neosave.chordccm2.dev;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1198,9 +1199,10 @@
 					"$(PROJECT_DIR)/Uservoice",
 				);
 				OTHER_LDFLAGS = "-all_load";
+				PRODUCT_BUNDLE_IDENTIFIER = me.neosave.chordccm2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "139422c6-7a1e-46ee-a21b-135f41eead2c";
-				PROVISIONING_PROFILE_SPECIFIER = me.neosave.chordccm.dist;
+				PROVISIONING_PROFILE = "9a556089-6811-4822-b973-ccd1c0fce5b8";
+				PROVISIONING_PROFILE_SPECIFIER = me.neosave.chordccm2.dist;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

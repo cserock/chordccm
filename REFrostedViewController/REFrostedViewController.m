@@ -308,7 +308,7 @@
 - (void) inviteFB {
     
     FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-    content.contentURL = [NSURL URLWithString:@"https://itunes.apple.com/app/id901633885?mt=8"];
+    content.contentURL = [NSURL URLWithString:@"https://itunes.apple.com/app/id1209883831?mt=8"];
     [FBSDKShareDialog showFromViewController:self
                                  withContent:content
                                     delegate:self];
@@ -508,7 +508,7 @@
                               handler:^(UIAlertAction * action)
                               {
                                   [alert dismissViewControllerAnimated:YES completion:nil];
-                                  NSURL *url = [NSURL URLWithString:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=901633885&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"];
+                                  NSURL *url = [NSURL URLWithString:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=1209883831&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"];
                                   [[UIApplication sharedApplication] openURL:url];
                                   
                               }];

@@ -63,7 +63,8 @@
         */
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, 0, 24)];
-        label.text = [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"];
+//        label.text = [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"];
+        label.text = [NSString stringWithFormat:@"%@", NSLocalizedString(@"ChordCCM", nil)];
         label.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
         label.backgroundColor = [UIColor clearColor];
         label.textColor = [UIColor colorWithRed:62/255.0f green:68/255.0f blue:75/255.0f alpha:1.0f];
