@@ -25,5 +25,7 @@
 @property (nonatomic, assign) int bar_count;
 @property (nonatomic, assign) int pitch_count;
 @property (nonatomic, assign) int lyric_count;
+@property (nonatomic, assign) int refrain_start_bar;
+@property (nonatomic, assign) int briedge_start_bar;
 
 @end

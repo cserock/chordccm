@@ -22,7 +22,7 @@
 #define MOVE_PREV_SONG 0
 #define MOVE_NEXT_SONG 1
 
-//#define NSLog //
+#define NSLog //
 
 @interface SongDetailViewController ()
 
@@ -46,6 +46,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSLog(@"%@", self.songInfo);
+    
     
     NSLog(@"viewDidLoad - isPlayList : %d", _isPlaylist);
     NSLog(@"viewDidLoad - bookmarkIndex : %ld", _bookmarkIndex);
@@ -264,6 +267,8 @@
                 songInfo.bar_count = [(NSNumber *) [dict objectForKey:@"songInfo.bar_count"] intValue];
                 songInfo.lyric_count = [(NSNumber *) [dict objectForKey:@"songInfo.lyric_count"] intValue];
                 songInfo.pitch_count = [(NSNumber *) [dict objectForKey:@"songInfo.pitch_count"] intValue];
+                songInfo.refrain_start_bar = [(NSNumber *) [dict objectForKey:@"songInfo.refrain_start_bar"] intValue];
+                songInfo.briedge_start_bar = [(NSNumber *) [dict objectForKey:@"songInfo.briedge_start_bar"] intValue];
                 
                 
                 [_playListSongs addObject:songInfo];
@@ -592,7 +597,10 @@
     NSString *songBeat = self.songInfo.beat;
     _songBarCount = self.songInfo.bar_count;
     _songLyricCount = self.songInfo.lyric_count;
+    _songRefrainStartBar = self.songInfo.refrain_start_bar;
+    _songBriedgeStartBar = self.songInfo.briedge_start_bar;
     
+    NSLog(@"_songRefrainStartBar, _songBriedgeStartBar : %d, %d", _songRefrainStartBar, _songBriedgeStartBar);
     
     if(_songLyricCount == 1){
         _songLyricCount = 2;
@@ -698,6 +706,9 @@
     
     int beatIndex = 0;
     int barIndex = 0;
+    
+    int adjustBarIndex = 0;
+    
     CGFloat cellX = _lineX;
     
     CGFloat lineWidth = _screenWidth-(_lineX*2.0f);
@@ -851,11 +862,64 @@
                  */
             }
             
+            CGFloat adjustCellBarTypeX = 8.0f;
+            CGFloat adjustCellBarTypeY = 6.0f;
+            CGFloat adjustCellBarFontSize = 4.0f;
+            
+            
+            if(_beatCountInBar == 6){
+                adjustCellBarTypeX = 11.0f;
+                adjustCellBarTypeY = 8.0f;
+                adjustCellBarFontSize = 6.0f;
+            }
+            
+            
+            if([_appDelegate isPad]){
+                
+                adjustCellBarTypeX = 17.0f;
+                adjustCellBarTypeY = 14.0f;
+                adjustCellBarFontSize = 10.0f;
+                
+                if(_beatCountInBar == 6){
+                    adjustCellBarTypeX = 24.0f;
+                    adjustCellBarTypeY = 19.0f;
+                    adjustCellBarFontSize = 10.0f;
+                }
+
+            }
+            
             UIImage *barTypeImage = [UIImage imageNamed:barImageFileName];
             UIImageView *cellBarType = [[UIImageView alloc] initWithImage:barTypeImage];
             cellBarType.frame = CGRectMake(barType_lineX, barTypelineY, cellWidth+(cellWidth/2), cellWidth+(cellWidth/2));
+            cellBarType.layer.zPosition = 2000;
             [self.noteView addSubview:cellBarType];
             
+            
+            // show bar index
+            if(i < (totalBeatCountInLine-1)){
+                
+                adjustBarIndex =(beatIndex/_beatCountInBar)+1;
+                
+                NSString *barIndexString = [NSString stringWithFormat:@"%d", adjustBarIndex];
+                UILabel *cellBarIndex = [[UILabel alloc] initWithFrame:CGRectMake(barType_lineX+adjustCellBarTypeX, barTypelineY-adjustCellBarTypeY, cellWidth, cellWidth+(cellWidth/2))];
+                                                                                  
+                [cellBarIndex setText:barIndexString];
+                [cellBarIndex setTextColor:[UIColor colorWithRed:(79/255.f) green:(80/255.f) blue:(82/255.f) alpha:1.0f]];
+                
+                if((_songRefrainStartBar > 0) && (adjustBarIndex >= _songRefrainStartBar)){
+                    [cellBarIndex setTextColor:[UIColor whiteColor]];
+                }
+                
+                [cellBarIndex setBackgroundColor:[UIColor clearColor]];
+                [cellBarIndex setTextAlignment:NSTextAlignmentCenter];
+                cellBarIndex.adjustsFontSizeToFitWidth = YES;
+//                [cellBarIndex setFont:[UIFont fontWithName: @"Georgia-Italic" size: _fontSize]];
+                [cellBarIndex setFont:[UIFont boldSystemFontOfSize:_fontSize-adjustCellBarFontSize]];
+                
+                cellBarIndex.layer.zPosition = 1000;
+                
+                [self.noteView addSubview:cellBarIndex];
+            }
         }
         
         float cornerRadius = 2.0f;
@@ -947,6 +1011,7 @@
 //                cellChord.textAlignment = NSTextAlignmentCenter;
                 cellChord.clipsToBounds = YES;
                 //                cellChord.layer.cornerRadius = cornerRadius;
+                
                 [cellChord addSubview:cellChord1];
                 
 //                NSString *chordOptionString1 = [NSString stringWithFormat:@"%@", songData.chord_1_option];
@@ -1036,6 +1101,7 @@
                 }
                
                 
+                
                 [self.noteView addSubview:cellChord];
                 
                 
@@ -1084,6 +1150,7 @@
                 UIImage *restTypeImage = [UIImage imageNamed:restImageFileName];
                 UIImageView *cellRestType = [[UIImageView alloc] initWithImage:restTypeImage];
                 cellRestType.frame = CGRectMake(restTypeLineX, restTypelineY, cellWidth+3, cellHeight+3);
+                cellRestType.layer.zPosition = 3000;
                 [self.noteView addSubview:cellRestType];
             }
         }
@@ -1091,6 +1158,7 @@
         if(beatIndex <= _beatMaxCount){
         
             [self makeLyric:songData];
+            
             
             _beatAllString = [_beatAllString stringByAppendingString:@"☐"];
             
@@ -1112,11 +1180,22 @@
                 UILabel *cellBeat_cell = [[UILabel alloc] initWithFrame:CGRectMake(cellX+2, beatIndexlineY, barWidth, cellHeight + beatCellHeight)];
                 cellBeat_cell.tag = 30000 + barIndex;
                 [cellBeat_cell setTextColor:[UIColor colorWithRed:(148/255.f) green:(123/255.f) blue:(131/255.f) alpha:1.0f]];
+                
                 [cellBeat_cell setBackgroundColor:[UIColor clearColor]];
+                
+                if((_songRefrainStartBar > 0) && (barIndex >= _songRefrainStartBar)){
+                    [cellBeat_cell setTextColor:[UIColor whiteColor]];
+                    [cellBeat_cell setBackgroundColor:[UIColor colorWithRed:(0.13f) green:(0.69f) blue:(0.75f) alpha:1.0f]];
+                }
+                
+                if((_songBriedgeStartBar > 0) && (barIndex >= _songBriedgeStartBar)){
+                    [cellBeat_cell setTextColor:[UIColor whiteColor]];
+                    [cellBeat_cell setBackgroundColor:[UIColor colorWithRed:(0.40f) green:(0.71f) blue:(0.44f) alpha:1.0f]];
+                }
+                
                 [cellBeat_cell setFont:[UIFont fontWithName: @"HelveticaNeue-Light" size: _fontSize]];
                 [self.noteView addSubview:cellBeat_cell];
                 
-                /*
                 // Lyric_1_cell
                 TTTRegexAttributedLabel *cellLyric_1_cell = [[TTTRegexAttributedLabel alloc] initWithFrame:CGRectMake(cellX+2, lyric_1_lineY, barWidth, cellHeight+3)];
                 cellLyric_1_cell.tag = 40000 + barIndex;
@@ -1125,7 +1204,7 @@
                 [cellLyric_1_cell setFont:[UIFont fontWithName: @"HelveticaNeue-Light" size: _fontSize]];
                 [self.noteView addSubview:cellLyric_1_cell];
                 
-               
+                /*
                 // Lyric_2_cell
                 if(![_lyric_2_AllString isEqualToString:@""]){
                     TTTRegexAttributedLabel *cellLyric_2_cell = [[TTTRegexAttributedLabel alloc] initWithFrame:CGRectMake(cellX+2, lyric_2_lineY, barWidth, cellHeight+3)];
@@ -1156,6 +1235,7 @@
                     [self.noteView addSubview:cellLyric_4_cell];
                 }
                 */
+                
             } else if((beatIndex % _beatCountInBar) == 0){
                 
                 // beat
@@ -1173,6 +1253,8 @@
                 
                 Beat_Label.attributedText = attributedString;
                 _beatAllString = @"";
+                
+                
                 
                 /*
                 // Lyric_1
@@ -1200,7 +1282,7 @@
                     [Lyric_4_Label setLyricText:_lyric_4_AllString withBeatCountInBar:_beatCountInBar];
                     _lyric_4_AllString = @"";
                 }
-                 */
+                */
             }
         }
         cellX = cellX + cellWidth;
@@ -1427,6 +1509,8 @@
             songInfoOrigin.chord_option = [results stringForColumnIndex:11];
             songInfoOrigin.bar_count = [results intForColumnIndex:12];
             songInfoOrigin.lyric_count = [results intForColumnIndex:13];
+            songInfoOrigin.refrain_start_bar = [results intForColumnIndex:14];
+            songInfoOrigin.briedge_start_bar = [results intForColumnIndex:15];
             songInfoOrigin.pitch_count = 0;
         }
         
@@ -1456,6 +1540,8 @@
             self.songInfo.chord_option, @"songInfo.chord_option",
             [NSNumber numberWithInt: self.songInfo.bar_count], @"songInfo.bar_count",
             [NSNumber numberWithInt: self.songInfo.lyric_count], @"songInfo.lyric_count",
+              [NSNumber numberWithInt: self.songInfo.refrain_start_bar], @"songInfo.refrain_start_bar",
+              [NSNumber numberWithInt: self.songInfo.briedge_start_bar], @"songInfo.briedge_start_bar",
             [NSNumber numberWithInt: _pitchCount], @"songInfo.pitch_count",
             nil];
     

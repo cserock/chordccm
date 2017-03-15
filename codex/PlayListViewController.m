@@ -89,6 +89,8 @@
                 songInfo.bar_count = [(NSNumber *) [dict objectForKey:@"songInfo.bar_count"] intValue];
                 songInfo.lyric_count = [(NSNumber *) [dict objectForKey:@"songInfo.lyric_count"] intValue];
                 songInfo.pitch_count = [(NSNumber *) [dict objectForKey:@"songInfo.pitch_count"] intValue];
+                songInfo.refrain_start_bar = [(NSNumber *) [dict objectForKey:@"songInfo.refrain_start_bar"] intValue];
+                songInfo.briedge_start_bar = [(NSNumber *) [dict objectForKey:@"songInfo.briedge_start_bar"] intValue];
                 
                 
                 [_songs addObject:songInfo];
@@ -290,6 +292,8 @@
                               songInfo.chord_option, @"songInfo.chord_option",
                               [NSNumber numberWithInt: songInfo.bar_count], @"songInfo.bar_count",
                               [NSNumber numberWithInt: songInfo.lyric_count], @"songInfo.lyric_count",
+                              [NSNumber numberWithInt: songInfo.refrain_start_bar], @"songInfo.refrain_start_bar",
+                              [NSNumber numberWithInt: songInfo.briedge_start_bar], @"songInfo.briedge_start_bar",
                               [NSNumber numberWithInt: songInfo.pitch_count], @"songInfo.pitch_count",
                               nil];
         

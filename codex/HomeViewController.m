@@ -104,12 +104,15 @@ NSArray *searchResults;
             songInfo.chord_option = [results stringForColumnIndex:11];
             songInfo.bar_count = [results intForColumnIndex:12];
             songInfo.lyric_count = [results intForColumnIndex:13];
+            songInfo.refrain_start_bar = [results intForColumnIndex:14];
+            songInfo.briedge_start_bar = [results intForColumnIndex:15];
             songInfo.pitch_count = 0;
             
             [_songs addObject:songInfo];
         }
         
 //        NSLog(@"%d, %d, %@, %@, %@, %@, %@", [results intForColumnIndex:0], [results intForColumnIndex:1], [results stringForColumnIndex:2], [results stringForColumnIndex:8], [results stringForColumnIndex:9], [results stringForColumnIndex:10], [results stringForColumnIndex:11]);
+        
     }
     [_database close];
     

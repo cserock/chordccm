@@ -25,5 +25,7 @@
 @synthesize bar_count;
 @synthesize pitch_count;
 @synthesize lyric_count;
+@synthesize refrain_start_bar;
+@synthesize briedge_start_bar;
 
 @end

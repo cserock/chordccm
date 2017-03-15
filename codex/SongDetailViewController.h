@@ -31,6 +31,9 @@
 @property (nonatomic, assign) int beatMaxCount;
 @property (nonatomic, assign) int lastBeatIndex;
 
+@property (nonatomic, assign) int songRefrainStartBar;
+@property (nonatomic, assign) int songBriedgeStartBar;
+
 @property (nonatomic, strong) NSArray *chordArray;
 
 @property (nonatomic, strong) NSString *beatAllString;
